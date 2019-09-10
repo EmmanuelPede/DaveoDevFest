@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import CustomersList from "./components/ListeDesJoueurs.vue";
 import AddCustomer from "./components/AjouterJoueur.vue";
+import ScanCustomer from "./components/ScannerJoueur.vue";
 import SearchCustomers from "./components/Recherche.vue";
 import Customer from "./components/Joueur.vue";
 
@@ -28,6 +29,11 @@ export default new Router({
       path: "/ajouterManuellement",
       name: "add",
       component: AddCustomer
+    },
+    {
+      path: "/ajouterScanner",
+      name: "scan",
+      component: ScanCustomer
     },
     {
       path: "/rechercher",

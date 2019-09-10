@@ -41,6 +41,8 @@ export default {
       customer: {
         id: 0,
         firstName: "",
+        lastName: "",
+        email: "",
         score: 0,
         active: false
       },
