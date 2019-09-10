@@ -37,24 +37,25 @@ public class CustomerController {
 
 	@PostMapping("/customer")
 	public Customer postCustomer(@RequestBody Customer customer) {
-
 		Customer saveCustomer = repository.save(new Customer(customer.getFirstName(), customer.getLastName(), customer.getEmail(), customer.getScore()));
 		return saveCustomer;
 	}
 
 	@DeleteMapping("/customer/{id}")
 	public ResponseEntity<String> deleteCustomer(@PathVariable("id") String id) {
-		System.out.println("Delete Customer with ID = " + id + "...");
-
 		repository.deleteById(id);
-
 		return new ResponseEntity<>("Customer has been deleted!", HttpStatus.OK);
 	}
 
 	@GetMapping("customers/firstname/{firstname}")
-	public List<Customer> findByAge(@PathVariable String firstName) {
-
+	public List<Customer> findByFirstName(@PathVariable String firstName) {
 		List<Customer> customers = repository.findByFirstName(firstName);
+		return customers;
+	}
+
+	@GetMapping("customers/email/{email}")
+	public List<Customer> findByEmail(@PathVariable String email) {
+		List<Customer> customers = repository.findByEmail(email);
 		return customers;
 	}
 

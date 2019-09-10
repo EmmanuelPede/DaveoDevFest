@@ -2,16 +2,16 @@
   <div class="searchform">
     <h4>Rechercher par nom</h4>
     <div class="form-group">
-      <input class="form-control" id="nom" required v-model="firstName" firstName="Nom">
+      <input class="form-control" id="email" required v-model="email" email="email">
     </div>
  
     <div class="btn-group">
-      <button v-on:click="searchCustomers" class="btn btn-success">Recherche</button>
+      <button v-on:click="searchCustomersByEmail" class="btn btn-success">Recherche</button>
     </div>
 
     <ul class="search-result">
       <li v-for="(customer, index) in customers" :key="index">
-        <h6>{{customer.firstName}} ({{customer.score}})</h6>
+        <h6>{{customer.firstName}} {{customer.lastName}} ({{customer.score}})</h6>
       </li>
     </ul>
   </div>
@@ -30,9 +30,9 @@ export default {
   },
   methods: {
     /* eslint-disable no-console */
-    searchCustomers() {
+    searchCustomersByEmail() {
       http
-        .get("/customers/score/" + this.score)
+        .get("/customers/email/" + this.email)
         .then(response => {
           this.customers = response.data; // JSON are parsed automatically.
           console.log(response.data);

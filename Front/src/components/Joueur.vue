@@ -1,8 +1,14 @@
 <template>
   <div v-if="this.customer">
-    <h4>Customer</h4>
+    <h4>Joueur</h4>
     <div>
       <label>Nom: </label> {{this.customer.firstName}}
+    </div>
+    <div>
+      <label>Prénom: </label> {{this.customer.lastName}}
+    </div>
+    <div>
+      <label>Email: </label> {{this.customer.email}}
     </div>
     <div>
       <label>Age: </label> {{this.customer.score}}
@@ -13,16 +19,16 @@
   
     <span v-if="this.customer.active"
       v-on:click="updateActive(false)"
-      class="button is-small btn-primary">Inactive</span>
+      class="button is-small btn-primary">Inactif</span>
     <span v-else
       v-on:click="updateActive(true)"
-      class="button is-small btn-primary">Active</span>
+      class="button is-small btn-primary">Actif</span>
   
-    <span class="button is-small btn-danger" v-on:click="deleteCustomer()">Delete</span>
+    <span class="button is-small btn-danger" v-on:click="deleteCustomer()">Supprimer</span>
   </div>
   <div v-else>
     <br/>
-    <p>Please click on a Customer...</p>
+    <p>Cliquer sur un joueur</p>
   </div>
 </template>
 
@@ -38,6 +44,8 @@ export default {
       var data = {
         id: this.customer.id,
         firstName: this.customer.firstName,
+        lastName: this.customer.lastName,
+        email: this.customer.email,
         score: this.customer.score,
         active: status
       };
