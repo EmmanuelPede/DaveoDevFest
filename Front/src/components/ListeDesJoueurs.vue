@@ -5,10 +5,10 @@
             <ul>
                 <li v-for="(customer, index) in customers" :key="index">
                     <router-link :to="{
-                            name: 'customer-details',
+                            firstName: 'customer-details',
                             params: { customer: customer, id: customer.id }
                         }">
-                            {{customer.name}}
+                            {{customer.firstName}}
                     </router-link>
                 </li>
             </ul>
@@ -23,7 +23,7 @@
 import http from "../http-common";
 
 export default {
-  name: "customers-list",
+  firstName: "customers-list",
   data() {
     return {
       customers: []

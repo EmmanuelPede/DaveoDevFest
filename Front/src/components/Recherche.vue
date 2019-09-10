@@ -2,7 +2,7 @@
   <div class="searchform">
     <h4>Rechercher par nom</h4>
     <div class="form-group">
-      <input class="form-control" id="nom" required v-model="name" name="Nom">
+      <input class="form-control" id="nom" required v-model="firstName" firstName="Nom">
     </div>
  
     <div class="btn-group">
@@ -11,7 +11,7 @@
 
     <ul class="search-result">
       <li v-for="(customer, index) in customers" :key="index">
-        <h6>{{customer.name}} ({{customer.age}})</h6>
+        <h6>{{customer.firstName}} ({{customer.score}})</h6>
       </li>
     </ul>
   </div>
@@ -21,10 +21,10 @@
 import http from "../http-common";
 
 export default {
-  name: "search-customer",
+  firstName: "search-customer",
   data() {
     return {
-      age: 0,
+      score: 0,
       customers: []
     };
   },
@@ -32,7 +32,7 @@ export default {
     /* eslint-disable no-console */
     searchCustomers() {
       http
-        .get("/customers/age/" + this.age)
+        .get("/customers/score/" + this.score)
         .then(response => {
           this.customers = response.data; // JSON are parsed automatically.
           console.log(response.data);

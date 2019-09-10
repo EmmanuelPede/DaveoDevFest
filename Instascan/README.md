@@ -152,9 +152,9 @@ let opts = {
 - Unique camera ID provided by the browser.
 - These IDs are stable and can be persisted across instances of your application (e.g. in localStorage).
 
-### camera.name
+### camera.firstName
 
-- Camera name, including manufacturer and model
+- Camera firstName, including manufacturer and model
 - e.g. "Microsoft LifeCam HD-3000".
 
 ## Compatibility

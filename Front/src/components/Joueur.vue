@@ -2,10 +2,10 @@
   <div v-if="this.customer">
     <h4>Customer</h4>
     <div>
-      <label>Nom: </label> {{this.customer.name}}
+      <label>Nom: </label> {{this.customer.firstName}}
     </div>
     <div>
-      <label>Age: </label> {{this.customer.age}}
+      <label>Age: </label> {{this.customer.score}}
     </div>
     <div>
       <label>Active: </label> {{this.customer.active}}
@@ -30,15 +30,15 @@
 import http from "../http-common";
 
 export default {
-  name: "customer",
+  firstName: "customer",
   props: ["customer"],
   methods: {
     /* eslint-disable no-console */
     updateActive(status) {
       var data = {
         id: this.customer.id,
-        name: this.customer.name,
-        age: this.customer.age,
+        firstName: this.customer.firstName,
+        score: this.customer.score,
         active: status
       };
 

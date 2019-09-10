@@ -19,9 +19,9 @@
           <ul>
             <li v-if="cameras.length === 0" class="empty">Aucune caméra détectée</li>
             <li v-for="camera in cameras">
-              <span v-if="camera.id == activeCameraId" :title="formatName(camera.name)" class="active">{{ formatName(camera.name) }}</span>
-              <span v-if="camera.id != activeCameraId" :title="formatName(camera.name)">
-                <a @click.stop="selectCamera(camera)">{{ formatName(camera.name) }}</a>
+              <span v-if="camera.id == activeCameraId" :title="formatName(camera.firstName)" class="active">{{ formatName(camera.firstName) }}</span>
+              <span v-if="camera.id != activeCameraId" :title="formatName(camera.firstName)">
+                <a @click.stop="selectCamera(camera)">{{ formatName(camera.firstName) }}</a>
               </span>
             </li>
           </ul>
@@ -31,7 +31,7 @@
           <ul v-if="scans.length === 0">
             <li class="empty">Aucun badge scanné</li>
           </ul>
-          <transition-group name="scans" tag="ul">
+          <transition-group firstName="scans" tag="ul">
             <li v-for="scan in scans" :key="scan.date" :title="scan.content">{{ scan.content }}</li>
           </transition-group>
         </section>

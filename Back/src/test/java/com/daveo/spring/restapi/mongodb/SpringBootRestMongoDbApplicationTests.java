@@ -1,4 +1,4 @@
-package com.grokonez.spring.restapi.mongodb;
+package com.daveo.spring.restapi.mongodb;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

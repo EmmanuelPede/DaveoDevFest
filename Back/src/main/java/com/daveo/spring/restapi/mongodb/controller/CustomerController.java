@@ -1,4 +1,4 @@
-package com.grokonez.spring.restapi.mongodb.controller;
+package com.daveo.spring.restapi.mongodb.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.grokonez.spring.restapi.mongodb.model.Customer;
-import com.grokonez.spring.restapi.mongodb.repo.CustomerRepository;
+import com.daveo.spring.restapi.mongodb.model.Customer;
+import com.daveo.spring.restapi.mongodb.repo.CustomerRepository;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -30,19 +30,16 @@ public class CustomerController {
 
 	@GetMapping("/customers")
 	public List<Customer> getAllCustomers() {
-		System.out.println("Get all Customers...");
-
 		List<Customer> customers = new ArrayList<>();
 		repository.findAll().forEach(customers::add);
-
 		return customers;
 	}
 
 	@PostMapping("/customer")
 	public Customer postCustomer(@RequestBody Customer customer) {
 
-		Customer _customer = repository.save(new Customer(customer.getName(), customer.getAge()));
-		return _customer;
+		Customer saveCustomer = repository.save(new Customer(customer.getFirstName(), customer.getLastName(), customer.getEmail(), customer.getScore()));
+		return saveCustomer;
 	}
 
 	@DeleteMapping("/customer/{id}")
@@ -54,10 +51,10 @@ public class CustomerController {
 		return new ResponseEntity<>("Customer has been deleted!", HttpStatus.OK);
 	}
 
-	@GetMapping("customers/age/{age}")
-	public List<Customer> findByAge(@PathVariable int age) {
+	@GetMapping("customers/firstname/{firstname}")
+	public List<Customer> findByAge(@PathVariable String firstName) {
 
-		List<Customer> customers = repository.findByAge(age);
+		List<Customer> customers = repository.findByFirstName(firstName);
 		return customers;
 	}
 
@@ -68,11 +65,13 @@ public class CustomerController {
 		Optional<Customer> customerData = repository.findById(id);
 
 		if (customerData.isPresent()) {
-			Customer _customer = customerData.get();
-			_customer.setName(customer.getName());
-			_customer.setAge(customer.getAge());
-			_customer.setActive(customer.isActive());
-			return new ResponseEntity<>(repository.save(_customer), HttpStatus.OK);
+			Customer updateCustomer = customerData.get();
+			updateCustomer.setFirstName(customer.getFirstName());
+			updateCustomer.setLastName(customer.getLastName());
+			updateCustomer.setEmail(customer.getEmail());
+			updateCustomer.setScore(customer.getScore());
+			updateCustomer.setActive(customer.isActive());
+			return new ResponseEntity<>(repository.save(updateCustomer), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

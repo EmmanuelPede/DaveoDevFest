@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  name: "app"
+  firstName: "app"
 };
 </script>
 

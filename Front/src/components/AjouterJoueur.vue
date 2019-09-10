@@ -2,13 +2,13 @@
   <div class="submitform">
     <div v-if="!submitted">
         <div class="form-group">
-          <label for="name">Name</label>
-          <input type="text" class="form-control" id="name" required v-model="customer.name" name="name">
+          <label for="firstName">Name</label>
+          <input type="text" class="form-control" id="firstName" required v-model="customer.firstName" firstName="firstName">
         </div>
     
         <div class="form-group">
-          <label for="age">Age</label>
-          <input type="number" class="form-control" id="age" required v-model="customer.age" name="age">
+          <label for="score">Age</label>
+          <input type="number" class="form-control" id="score" required v-model="customer.score" firstName="score">
         </div>
     
         <button v-on:click="saveCustomer" class="btn btn-success">Submit</button>
@@ -25,13 +25,13 @@
 import http from "../http-common";
 
 export default {
-  name: "add-customer",
+  firstName: "add-customer",
   data() {
     return {
       customer: {
         id: 0,
-        name: "",
-        age: 0,
+        firstName: "",
+        score: 0,
         active: false
       },
       submitted: false
@@ -41,8 +41,8 @@ export default {
     /* eslint-disable no-console */
     saveCustomer() {
       var data = {
-        name: this.customer.name,
-        age: this.customer.age
+        firstName: this.customer.firstName,
+        score: this.customer.score
       };
 
       http
