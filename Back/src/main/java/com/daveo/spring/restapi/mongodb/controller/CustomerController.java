@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.daveo.spring.restapi.mongodb.model.Customer;
 import com.daveo.spring.restapi.mongodb.repo.CustomerRepository;
 
+/**
+ * CustomerController
+ */
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api")
