@@ -1,4 +1,4 @@
-# vue-springboot
+# Front Daveo DevFest 2k19
 
 ## Project setup
 ```

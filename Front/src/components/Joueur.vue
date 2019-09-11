@@ -17,11 +17,9 @@
       <label>Active: </label> {{this.customer.active}}
     </div>
   
-    <span v-if="this.customer.active"
-      v-on:click="updateActive(false)"
+    <span v-if="this.customer.active" v-on:click="updateActive(false)"
       class="button is-small btn-primary">Inactif</span>
-    <span v-else
-      v-on:click="updateActive(true)"
+    <span v-else v-on:click="updateActive(true)"
       class="button is-small btn-primary">Actif</span>
   
     <span class="button is-small btn-danger" v-on:click="deleteCustomer()">Supprimer</span>

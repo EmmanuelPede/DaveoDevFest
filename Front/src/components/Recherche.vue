@@ -1,6 +1,6 @@
 <template>
   <div class="searchform">
-    <h4>Rechercher par nom</h4>
+    <h4>Rechercher par email</h4>
     <div class="form-group">
       <input class="form-control" id="email" required v-model="email" email="email">
     </div>
@@ -24,7 +24,7 @@ export default {
   firstName: "search-customer",
   data() {
     return {
-      score: 0,
+      email: "",
       customers: []
     };
   },
