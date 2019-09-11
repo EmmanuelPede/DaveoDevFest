@@ -12,6 +12,7 @@
     "babel-polyfill": "^6.9.1",
     "fsm-as-promised": "^0.13.0",
     "instascan": "^1.0.0",
+    "vcard-parser": "^1.0.0",
     "visibilityjs": "^1.2.3",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",

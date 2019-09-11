@@ -11,7 +11,7 @@
       <label>Email: </label> {{this.customer.email}}
     </div>
     <div>
-      <label>Age: </label> {{this.customer.score}}
+      <label>Score: </label> {{this.customer.score}}
     </div>
     <div>
       <label>Active: </label> {{this.customer.active}}

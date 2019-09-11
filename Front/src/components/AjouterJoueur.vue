@@ -54,6 +54,8 @@ export default {
     saveCustomer() {
       var data = {
         firstName: this.customer.firstName,
+        lastName: this.customer.lastName,
+        email: this.customer.email,
         score: this.customer.score
       };
 

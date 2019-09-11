@@ -2,21 +2,9 @@
     <div id="resultats">
         <h2>Résultats</h2>
         <div class="list">
-            <div class="item-list">toto</div>
-            <div class="item-list">toto</div>
-            <div class="item-list">toto</div>
-            <div class="item-list">toto</div>
-            <div class="item-list">toto</div>
-            <div class="item-list">toto</div>
-            <div class="item-list">toto</div>
-            <div class="item-list">toto</div>
-            <div class="item-list">toto</div>
-            <div class="item-list">toto</div>
-
             <div v-for="(customer, index) in customers" :key="index">
-
                 <router-link class="item-list" :to="{
-                        firstName: 'customer-details',
+                        name: 'customer-details',
                         params: { customer: customer, id: customer.id }
                     }">
                         {{customer.firstName}}

@@ -5,7 +5,7 @@
                 <h2>Cameras</h2>
                 <ul>
                     <li v-if="cameras.length === 0" class="empty">Aucune caméra détectée</li>
-                    <li v-for="camera in cameras">
+                    <li v-for="(camera, index) in cameras" :key="index">
                         <span v-if="camera.id == activeCameraId" :title="formatName(camera.name)" class="active">{{ formatName(camera.name) }}</span>
                         <span v-if="camera.id != activeCameraId" :title="formatName(camera.name)">
                     <a @click.stop="selectCamera(camera)">{{ formatName(camera.name) }}</a>
@@ -19,7 +19,7 @@
                     <li class="empty">Aucun badge scanné</li>
                 </ul>
                 <transition-group name="scans" tag="ul">
-                    <li v-for="scan in scans" :key="scan.date" :title="scan.content">{{ scan.content }}</li>
+                    <li v-for="scan in scans" :key="scan.date" :title="saveCustomer(scan.content)">{{ scan.content }}</li>
                 </transition-group>
             </section>
         </div>
@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import http from "../http-common";
 
 export default {
     name: "scan-customer",
@@ -39,6 +40,14 @@ export default {
             activeCameraId: null,
             cameras: [],
             scans: [],
+            customer: {
+                id: 0,
+                firstName: "",
+                lastName: "",
+                email: "",
+                score: 0,
+                active: false
+            },
             submitted: false
         };
     },
@@ -74,6 +83,27 @@ export default {
         selectCamera: function (camera) {
             this.activeCameraId = camera.id;
             this.scanner.start(camera);
+        },
+        saveCustomer: function (contentScan) {
+            var vCard = require('vcard-parser');
+            console.info(contentScan);
+            var card = vCard.parse(contentScan);
+            console.info(card.n[0]);
+            console.info(card.n[0].value[0]);
+            var data = {
+                firstName: card.n[0].value[0] || "",
+                lastName: card.n[0].value[1] || ""
+            };
+            console.info(data);
+          http.post("/customer", data)
+            .then(response => {
+              this.customer.id = response.data.id;
+              console.log(response.data);
+            })
+            .catch(e => {
+              console.log(e);
+            });
+          this.submitted = true;
         }
         /* eslint-enable no-console */
     }
