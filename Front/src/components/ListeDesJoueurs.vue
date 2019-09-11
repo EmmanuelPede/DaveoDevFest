@@ -7,7 +7,7 @@
                         name: 'customer-details',
                         params: { customer: customer, id: customer.id }
                     }">
-                        {{customer.firstName}}
+                        {{customer.firstName}} {{customer.lastName}} - {{customer.score}}
                 </router-link>
             </div>
         </div>

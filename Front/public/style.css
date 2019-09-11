@@ -111,10 +111,6 @@ body, html {
   text-decoration: none;
 }
 
-.btn-daveo {
-
-}
-
 #resultats {
   flex-direction: column;
   display: flex;
@@ -135,4 +131,24 @@ body, html {
   color: #eaeaea;
   text-align: center;
   margin : 10px;
+}
+
+.submitform {
+  flex-direction: column;
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  color: #ffffff;
+  text-align: center;
+  margin: 0 20px;
+}
+
+.searchform{
+  flex-direction: column;
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  color: #ffffff;
+  text-align: center;
+  margin: 0 20px;
 }
