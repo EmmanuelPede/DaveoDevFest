@@ -7,7 +7,7 @@ Direct3D:
     VRAM:     3072 MB
     Driver:   24.21.13.9836
 Default GameObject BitMask: UI already registered
-    
+
 (Filename:  Line: 122)
 
 Begin MonoManager ReloadAssembly  
