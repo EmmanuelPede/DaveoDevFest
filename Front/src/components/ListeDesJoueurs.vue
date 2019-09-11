@@ -1,19 +1,29 @@
 <template>
-    <div class="list row">
-        <div class="col-md-6">
-            <h4>Customers List</h4>
-            <ul>
-                <li v-for="(customer, index) in customers" :key="index">
-                    <router-link :to="{
-                            firstName: 'customer-details',
-                            params: { customer: customer, id: customer.id }
-                        }">
-                            {{customer.firstName}}
-                    </router-link>
-                </li>
-            </ul>
+    <div id="resultats">
+        <h2>Résultats</h2>
+        <div class="list">
+            <div class="item-list">toto</div>
+            <div class="item-list">toto</div>
+            <div class="item-list">toto</div>
+            <div class="item-list">toto</div>
+            <div class="item-list">toto</div>
+            <div class="item-list">toto</div>
+            <div class="item-list">toto</div>
+            <div class="item-list">toto</div>
+            <div class="item-list">toto</div>
+            <div class="item-list">toto</div>
+
+            <div v-for="(customer, index) in customers" :key="index">
+
+                <router-link class="item-list" :to="{
+                        firstName: 'customer-details',
+                        params: { customer: customer, id: customer.id }
+                    }">
+                        {{customer.firstName}}
+                </router-link>
+            </div>
         </div>
-        <div class="col-md-6">
+        <div>
             <router-view @refreshData="refreshList"></router-view>
         </div>
     </div>
@@ -52,11 +62,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.list {
-  text-align: left;
-  max-width: 450px;
-  margin: auto;
-}
-</style>

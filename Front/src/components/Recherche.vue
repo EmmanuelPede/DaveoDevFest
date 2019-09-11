@@ -45,14 +45,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.searchform {
-  max-width: 300px;
-  margin: auto;
-}
-.search-result {
-  margin-top: 20px;
-  text-align: left;
-}
-</style>

@@ -1,14 +1,11 @@
 <template>
     <div id="scan">
         <div class="sidebar">
-            <section class="daveo">
-                <img class="logo" src="../assets/logoDaveo.png"/>
-            </section>
             <section class="cameras">
                 <h2>Cameras</h2>
                 <ul>
                     <li v-if="data.cameras.length === 0" class="empty">Aucune caméra détectée</li>
-                    <li v-for="camera in data.cameras">
+                    <li v-for="camera in data.cameras" :key="camera">
                         <span v-if="camera.id == activeCameraId" :title="formatName(camera.firstName)" class="active">{{ formatName(camera.firstName) }}</span>
                         <span v-if="camera.id != activeCameraId" :title="formatName(camera.firstName)">
                     <a @click.stop="selectCamera(camera)">{{ formatName(camera.firstName) }}</a>
@@ -56,6 +53,7 @@ export default {
         };
     },
     methods: {
+        /* eslint-disable no-console */
         formatName: function (name) {
             return name || '(Inconnu)';
         },
@@ -63,96 +61,7 @@ export default {
             this.activeCameraId = camera.id;
             this.scanner.start(camera);
         }
+        /* eslint-enable no-console */
     }
 };
 </script>
-
-<style>
-    body, html {
-        padding: 0;
-        margin: 0;
-        font-family: 'Helvetica Neue', 'Calibri', Arial, sans-serif;
-        height: 100%;
-    }
-    #scan {
-        background: #263238;
-        display: flex;
-        align-items: stretch;
-        justify-content: stretch;
-        height: 100%;
-        width: 100%;
-    }
-    .sidebar {
-        background: #eaeaea;
-        min-width: 250px;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        overflow: auto;
-    }
-    .sidebar h2 {
-        font-weight: normal;
-        font-size: 1.0rem;
-        background: #D54972;
-        color: #fff;
-        padding: 10px;
-        margin: 0;
-    }
-    .sidebar ul {
-        margin: 0;
-        padding: 0;
-        list-style-type: none;
-    }
-    .sidebar li {
-        line-height: 175%;
-        white-space: nowrap;
-        overflow: hidden;
-        text-wrap: none;
-        text-overflow: ellipsis;
-    }
-    .cameras ul {
-        padding: 15px 20px;
-    }
-    .cameras .active {
-        font-weight: bold;
-        color: #009900;
-    }
-    .cameras a {
-        color: #555;
-        text-decoration: none;
-        cursor: pointer;
-    }
-    .cameras a:hover {
-        text-decoration: underline;
-    }
-    .scans li {
-        padding: 10px 20px;
-        border-bottom: 1px solid #ccc;
-    }
-    .scans-enter-active {
-        transition: background 3s;
-    }
-    .scans-enter {
-        background: yellow;
-    }
-    .empty {
-        font-style: italic;
-    }
-    .preview-container {
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        display: flex;
-        width: 100%;
-        overflow: hidden;
-        background: url("../assets/logo_devfest.png") no-repeat center #FFF;
-    }
-    /**CUSTOM**/
-    .daveo {
-        padding: 10px;
-    }
-    .logo {
-        max-width: 230px;
-    }
-
-</style>

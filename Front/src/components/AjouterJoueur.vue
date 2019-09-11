@@ -77,10 +77,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.submitform {
-  max-width: 300px;
-  margin: auto;
-}
-</style>

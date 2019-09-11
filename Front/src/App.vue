@@ -1,16 +1,18 @@
 <template>
     <div id="app" class="container-fluid">
-        <div class="site-info">
-            <h1>Daveo</h1>
-            <h3>DevFest 2019</h3>
+        <div class="sidebar">
+            <section class="daveo">
+                <img class="logo" src="./assets/logo_devfest.png"/>
+            </section>
+            <section>
+                <nav>
+                    <router-link class="item-menu" to="/">Liste des joueurs</router-link>
+                    <router-link class="item-menu" to="/ajouterScanner">Scanner un joueur</router-link>
+                    <router-link class="item-menu" to="/ajouterManuellement">Ajouter un joueur manuellement</router-link>
+                    <router-link class="item-menu" to="/rechercher">Rechercher un joueur</router-link>
+                </nav>
+            </section>
         </div>
-        <nav>
-            <router-link class="btn btn-primary" to="/">Liste des joueurs</router-link>
-            <router-link class="btn btn-primary" to="/ajouterScanner">Scanner un joueur</router-link>
-            <router-link class="btn btn-primary" to="/ajouterManuellement">Ajouter un joueur manuellement</router-link>
-            <router-link class="btn btn-primary" to="/rechercher">Rechercher un joueur</router-link>
-        </nav>
-        <br/>
         <router-view/>
     </div>
 </template>
@@ -42,24 +44,3 @@ export default {
     }
 };
 </script>
-
-<style>
-body, html {
-    padding: 0;
-    margin: 0;
-    font-family: 'Helvetica Neue', 'Calibri', Arial, sans-serif;
-    height: 100%;
-}
-.site-info {
-  color: blue;
-  margin-bottom: 20px;
-}
-
-.btn-primary {
-  margin-right: 5px;
-}
-
-.container-fluid {
-  text-align: center;
-}
-</style>
