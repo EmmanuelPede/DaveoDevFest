@@ -1,11 +1,15 @@
 package com.daveo.spring.restapi.mongodb.parser;
 
-public class SongScoreDto {
+/**
+ * Ride = sondDto + score
+ */
+public class RideDto {
+
     private SongDto song;
 
     private Long score;
 
-    public SongScoreDto(SongDto song, Long score) {
+    public RideDto(SongDto song, Long score) {
         this.song = song;
         this.score = score;
     }
@@ -14,7 +18,7 @@ public class SongScoreDto {
         return song;
     }
 
-    public SongScoreDto setSong(SongDto song) {
+    public RideDto setSong(SongDto song) {
         this.song = song;
         return this;
     }
@@ -23,13 +27,13 @@ public class SongScoreDto {
         return score;
     }
 
-    public SongScoreDto setScore(Long score) {
+    public RideDto setScore(Long score) {
         this.score = score;
         return this;
     }
 
     @Override public String toString() {
-        return "SongScoreDto{" +
+        return "RideDto{" +
                 "song=" + song +
                 ", score=" + score +
                 '}';

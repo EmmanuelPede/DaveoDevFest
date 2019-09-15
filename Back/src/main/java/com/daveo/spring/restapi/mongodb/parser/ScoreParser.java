@@ -30,24 +30,24 @@ public class ScoreParser {
             Long currScore = null;
 
             final Map<SongDto, Long> mapSongScore = new HashMap<>();
-            final Map<Integer, SongScoreDto> mapLineNbSongScore = new HashMap<>();
+            final Map<Integer, RideDto> mapLineNbSongScore = new HashMap<>();
 
             for (int i = 0; i < lines.length; i++) {
                 String l = lines[i];
 
-                final SongScoreDto songScoreDto = handleLine(l);
+                final RideDto rideDto = handleLine(l);
 
-                if (songScoreDto != null) {
-                    if (songScoreDto.getSong() != null) {
-                        currSong = songScoreDto.getSong();
+                if (rideDto != null) {
+                    if (rideDto.getSong() != null) {
+                        currSong = rideDto.getSong();
                     }
-                    if (songScoreDto.getScore() != null) {
-                        currScore = songScoreDto.getScore();
+                    if (rideDto.getScore() != null) {
+                        currScore = rideDto.getScore();
                     }
 
                     if (currScore != null && currSong != null) {
                         mapSongScore.put(currSong, currScore);
-                        mapLineNbSongScore.put(i, new SongScoreDto(currSong, currScore));
+                        mapLineNbSongScore.put(i, new RideDto(currSong, currScore));
                         currScore = null;
                         currSong = null;
                     }
@@ -68,7 +68,7 @@ public class ScoreParser {
         return null;
     }
 
-    public SongScoreDto handleLine(final String line) {
+    public RideDto handleLine(final String line) {
 
         final Matcher scoreMatcher = scorePattern.matcher(line);
         final Matcher songMatcher = songPattern.matcher(line);
@@ -100,7 +100,7 @@ public class ScoreParser {
         }
 
         if (score != null || songDto != null) {
-            return new SongScoreDto(songDto, score);
+            return new RideDto(songDto, score);
         }
 
         return null;

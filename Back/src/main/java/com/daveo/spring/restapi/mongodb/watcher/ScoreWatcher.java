@@ -12,6 +12,7 @@ import java.nio.file.WatchService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -28,11 +29,14 @@ public class ScoreWatcher {
     @Value("${watcher.audiosurf.output.filename}")
     private String outputFileName;
 
-    @Autowired
-    private ScoreParser scoreParser;
+    private final ScoreParser scoreParser;
 
-    @Autowired
-    ResourceLoader resourceLoader;
+    private final ApplicationEventPublisher eventPublisher;
+
+    public ScoreWatcher(ScoreParser scoreParser, ApplicationEventPublisher eventPublisher) {
+        this.scoreParser = scoreParser;
+        this.eventPublisher = eventPublisher;
+    }
 
     @Scheduled(fixedDelay = Long.MAX_VALUE)
     public void watch() {
@@ -67,6 +71,7 @@ public class ScoreWatcher {
                             final Long lastScore = scoreParser.handleFile(file);
                             log.info("[AS2-TRACKER] Last score {}.", lastScore);
 
+                            this.eventPublisher.publishEvent(lastScore);
                         }
                     }
                 }

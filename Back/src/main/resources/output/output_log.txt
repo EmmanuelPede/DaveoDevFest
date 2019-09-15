@@ -11,7 +11,7 @@ Default GameObject BitMask: UI already registered
 (Filename:  Line: 122)
 
 Begin MonoManager ReloadAssembly  
-- Completed reload, in  0.127 seconds
+- Completed reload, in  0.127 seconds 
 <RI> Initializing input.
 
 <RI> Input initialized.
