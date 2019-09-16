@@ -19,10 +19,10 @@ public class ScoreParser {
 
     private Pattern songPattern = Pattern.compile("^sending score\\. title:(.+) duration:(\\d+) artist:(.*)$");
 
-    public Long handleFile(final File file) {
+    public RideDto handleFile(final File file) {
         try {
             final String fileContent = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-            log.info("[AS2-TRACKER] FileContentLength: {}.", fileContent.length());
+            log.debug("[AS2-TRACKER] FileContentLength: {}.", fileContent.length());
 
             final String[] lines = fileContent.split("\\r?\\n");
 
@@ -54,12 +54,12 @@ public class ScoreParser {
                 }
             }
 
-            log.info("[AS2-TRACKER] List of Song And Score : {}", mapSongScore);
-            log.info("[AS2-TRACKER] List of Song And Score with Line Nb: {}", mapLineNbSongScore);
+            log.debug("[AS2-TRACKER] List of Song And Score : {}", mapSongScore);
+            log.debug("[AS2-TRACKER] List of Song And Score with Line Nb: {}", mapLineNbSongScore);
 
             if (!mapLineNbSongScore.isEmpty()) {
                 final Integer keyOfMaxScore = mapLineNbSongScore.keySet().stream().max(Integer::compare).orElse(null);
-                return mapLineNbSongScore.get(keyOfMaxScore).getScore();
+                return mapLineNbSongScore.get(keyOfMaxScore);
             }
 
         } catch (IOException e) {
@@ -84,11 +84,11 @@ public class ScoreParser {
             songDuration = songMatcher.group(2);
             songArtist = songMatcher.group(3);
 
-            log.info("[AS2-TRACKER] Song: {} - Duration: {} - Artist: {}", songName, songDuration, songArtist);
+            log.debug("[AS2-TRACKER] Song: {} - Duration: {} - Artist: {}", songName, songDuration, songArtist);
         } else if (scoreMatcher.matches()) {
             score = Long.valueOf(scoreMatcher.group(1));
 
-            log.info("[AS2-TRACKER] Score: {}", score);
+            log.debug("[AS2-TRACKER] Score: {}", score);
         }
 
         SongDto songDto = null;

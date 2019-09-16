@@ -1,15 +1,17 @@
 package com.daveo.spring.restapi.mongodb.watcher;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardWatchEventKinds;
-import java.nio.file.WatchEvent;
-import java.nio.file.WatchKey;
-import java.nio.file.WatchService;
+import java.nio.file.*;
 import java.util.List;
+
+import com.daveo.spring.restapi.mongodb.parser.RideDto;
+import org.apache.commons.io.monitor.FileAlterationListener;
+import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
+import org.apache.commons.io.monitor.FileAlterationMonitor;
+import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
@@ -33,6 +35,8 @@ public class ScoreWatcher {
 
     private final ApplicationEventPublisher eventPublisher;
 
+    private static final int POLL_INTERVAL = 500;
+
     public ScoreWatcher(ScoreParser scoreParser, ApplicationEventPublisher eventPublisher) {
         this.scoreParser = scoreParser;
         this.eventPublisher = eventPublisher;
@@ -54,9 +58,47 @@ public class ScoreWatcher {
                 directory.mkdir();
             }
 
-            path.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY);
+            FileAlterationObserver observer = new FileAlterationObserver(pathString);
+            FileAlterationMonitor monitor = new FileAlterationMonitor(POLL_INTERVAL);
+            FileAlterationListener listener = new FileAlterationListenerAdaptor() {
+                @Override
+                public void onFileCreate(File file) {
+                    log.info("[AS2-TRACKER] Event kind: {}. File affected: {}.", "onFileCreate", file);
+                }
 
-            WatchKey key;
+                @Override
+                public void onFileDelete(File file) {
+                    log.info("[AS2-TRACKER] Event kind: {}. File affected: {}.", "onFileDelete", file);
+
+                }
+
+                @Override
+                public void onFileChange(File file) {
+                    // code for processing change event
+                    log.debug("[AS2-TRACKER] Event kind: {}. File affected: {}.", "onFileChange", file);
+
+                    if (file == null || !file.getName().equals(outputFileName)) {
+                        log.warn("[AS2-TRACKER] other file has been updated during watch: {}.", file);
+                    } else {
+                        if (file.exists()) {
+                            final RideDto lastRide = scoreParser.handleFile(file);
+                            log.info("[AS2-TRACKER] Last score {}.", lastRide);
+
+                            if (lastRide != null) {
+                                eventPublisher.publishEvent(lastRide);
+                            }
+                        }
+                    }
+                }
+            };
+            observer.addListener(listener);
+            monitor.addObserver(observer);
+
+            monitor.start();
+
+//            path.register(watchService, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE);
+
+ /*           WatchKey key;
             while ((key = watchService.take()) != null) {
                 List<WatchEvent<?>> watchEvents = key.pollEvents();
                 for (WatchEvent<?> event : watchEvents) {
@@ -68,17 +110,21 @@ public class ScoreWatcher {
 
                         final File file = new File(pathString + outputFileName);
                         if (file.exists()) {
-                            final Long lastScore = scoreParser.handleFile(file);
-                            log.info("[AS2-TRACKER] Last score {}.", lastScore);
+                            final RideDto lastRide = scoreParser.handleFile(file);
+                            log.info("[AS2-TRACKER] Last score {}.", lastRide);
 
-                            this.eventPublisher.publishEvent(lastScore);
+                            if (lastRide != null) {
+                                this.eventPublisher.publishEvent(lastRide);
+                            }
                         }
                     }
                 }
                 key.reset();
-            }
+            }*/
         } catch (InterruptedException | IOException e) {
             log.error("[AS2-TRACKER] Erreur lors de l'exécution du watcher.", e);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
