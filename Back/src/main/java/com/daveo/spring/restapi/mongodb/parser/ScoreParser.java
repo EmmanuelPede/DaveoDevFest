@@ -1,5 +1,6 @@
 package com.daveo.spring.restapi.mongodb.parser;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -7,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Component;
 import lombok.extern.log4j.Log4j2;
@@ -19,9 +22,11 @@ public class ScoreParser {
 
     private Pattern songPattern = Pattern.compile("^sending score\\. title:(.+) duration:(\\d+) artist:(.*)$");
 
-    public RideDto handleFile(final File file) {
-        try {
-            final String fileContent = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+    public RideDto handleFile(final BufferedReader reader) {
+
+        final String fileContent = readAllLines(reader);
+
+        if (fileContent != null && !fileContent.isEmpty()) {
             log.debug("[AS2-TRACKER] FileContentLength: {}.", fileContent.length());
 
             final String[] lines = fileContent.split("\\r?\\n");
@@ -60,11 +65,14 @@ public class ScoreParser {
             if (!mapLineNbSongScore.isEmpty()) {
                 final Integer keyOfMaxScore = mapLineNbSongScore.keySet().stream().max(Integer::compare).orElse(null);
                 return mapLineNbSongScore.get(keyOfMaxScore);
+
             }
 
-        } catch (IOException e) {
-            log.error("[AS2-TRACKER] Erreur lors de la lecture du fichier.", e);
+//        } catch (IOException e) {
+//            log.error("[AS2-TRACKER] Erreur lors de la lecture du fichier.", e);
+//        }
         }
+
         return null;
     }
 
@@ -104,5 +112,9 @@ public class ScoreParser {
         }
 
         return null;
+    }
+
+    public String readAllLines(BufferedReader reader) {
+        return reader.lines().collect(Collectors.joining(System.lineSeparator()));
     }
 }
