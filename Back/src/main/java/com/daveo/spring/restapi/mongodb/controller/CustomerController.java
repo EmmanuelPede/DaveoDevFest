@@ -40,7 +40,7 @@ public class CustomerController {
 
 	@PostMapping("/customer")
 	public Customer postCustomer(@RequestBody Customer customer) {
-		Customer saveCustomer = repository.save(new Customer(customer.getFirstName(), customer.getLastName(), customer.getEmail(), customer.getScore()));
+		Customer saveCustomer = repository.save(new Customer(customer.getFirstName(), customer.getLastName(), customer.getEmail(), customer.getLastScore()));
 		return saveCustomer;
 	}
 
@@ -73,7 +73,7 @@ public class CustomerController {
 			updateCustomer.setFirstName(customer.getFirstName());
 			updateCustomer.setLastName(customer.getLastName());
 			updateCustomer.setEmail(customer.getEmail());
-			updateCustomer.setScore(customer.getScore());
+			updateCustomer.setLastScore(customer.getLastScore());
 			updateCustomer.setActive(customer.isActive());
 			return new ResponseEntity<>(repository.save(updateCustomer), HttpStatus.OK);
 		} else {
