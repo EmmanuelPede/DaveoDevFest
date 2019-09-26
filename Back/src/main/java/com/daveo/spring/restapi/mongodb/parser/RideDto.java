@@ -18,18 +18,16 @@ public class RideDto {
         return song;
     }
 
-    public RideDto setSong(SongDto song) {
+    public void setSong(SongDto song) {
         this.song = song;
-        return this;
     }
 
     public Long getScore() {
         return score;
     }
 
-    public RideDto setScore(Long score) {
+    public void setScore(Long score) {
         this.score = score;
-        return this;
     }
 
     @Override public String toString() {

@@ -1,11 +1,10 @@
 package com.daveo.spring.restapi.mongodb.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.util.Date;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.Date;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -16,8 +15,11 @@ public class Ride {
     private Long id;
 
     private String songName;
+
     private String songDuration;
+
     private int score;
+
     private Date created;
 
     public Ride() {

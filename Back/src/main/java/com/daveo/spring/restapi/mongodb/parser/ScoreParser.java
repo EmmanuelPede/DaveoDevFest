@@ -1,26 +1,21 @@
 package com.daveo.spring.restapi.mongodb.parser;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Component;
 import lombok.extern.log4j.Log4j2;
 
-@Component
 @Log4j2
+@Component
 public class ScoreParser {
 
-    private Pattern scorePattern = Pattern.compile("^\\$#\\$ setting score (\\d+) for song: .+");
+    private final Pattern scorePattern = Pattern.compile("^\\$#\\$ setting score (\\d+) for song: .+");
 
-    private Pattern songPattern = Pattern.compile("^sending score\\. title:(.+) duration:(\\d+) artist:(.*)$");
+    private final Pattern songPattern = Pattern.compile("^sending score\\. title:(.+) duration:(\\d+) artist:(.*)$");
 
     public RideDto handleFile(final BufferedReader reader) {
 
@@ -29,48 +24,19 @@ public class ScoreParser {
         if (fileContent != null && !fileContent.isEmpty()) {
             log.debug("[AS2-TRACKER] FileContentLength: {}.", fileContent.length());
 
-            final String[] lines = fileContent.split("\\r?\\n");
+            final String[] allNewLines = fileContent.split("\\r?\\n");
 
-            SongDto currSong = null;
-            Long currScore = null;
+            final Map<Integer, RideDto> mapLineNbSongScore = extractAllRide(allNewLines);
 
-            final Map<SongDto, Long> mapSongScore = new HashMap<>();
-            final Map<Integer, RideDto> mapLineNbSongScore = new HashMap<>();
-
-            for (int i = 0; i < lines.length; i++) {
-                String l = lines[i];
-
-                final RideDto rideDto = handleLine(l);
-
-                if (rideDto != null) {
-                    if (rideDto.getSong() != null) {
-                        currSong = rideDto.getSong();
-                    }
-                    if (rideDto.getScore() != null) {
-                        currScore = rideDto.getScore();
-                    }
-
-                    if (currScore != null && currSong != null) {
-                        mapSongScore.put(currSong, currScore);
-                        mapLineNbSongScore.put(i, new RideDto(currSong, currScore));
-                        currScore = null;
-                        currSong = null;
-                    }
-                }
-            }
-
-            log.debug("[AS2-TRACKER] List of Song And Score : {}", mapSongScore);
             log.debug("[AS2-TRACKER] List of Song And Score with Line Nb: {}", mapLineNbSongScore);
 
             if (!mapLineNbSongScore.isEmpty()) {
-                final Integer keyOfMaxScore = mapLineNbSongScore.keySet().stream().max(Integer::compare).orElse(null);
+                final Integer keyOfMaxScore = mapLineNbSongScore.keySet().stream()
+                        .max(Integer::compare)
+                        .orElse(null);
+
                 return mapLineNbSongScore.get(keyOfMaxScore);
-
             }
-
-            //        } catch (IOException e) {
-            //            log.error("[AS2-TRACKER] Erreur lors de la lecture du fichier.", e);
-            //        }
         }
 
         return null;
@@ -114,7 +80,36 @@ public class ScoreParser {
         return null;
     }
 
-    public String readAllLines(BufferedReader reader) {
+    private String readAllLines(final BufferedReader reader) {
         return reader.lines().collect(Collectors.joining(System.lineSeparator()));
+    }
+
+    private Map<Integer, RideDto> extractAllRide(final String[] lines) {
+        final Map<Integer, RideDto> mapLineNbSongScore = new HashMap<>();
+
+        SongDto currSong = null;
+        Long currScore = null;
+
+        for (int i = 0; i < lines.length; i++) {
+            final String l = lines[i];
+
+            final RideDto rideDto = handleLine(l);
+
+            if (rideDto != null) {
+                if (rideDto.getSong() != null) {
+                    currSong = rideDto.getSong();
+                }
+                if (rideDto.getScore() != null) {
+                    currScore = rideDto.getScore();
+                }
+
+                if (currScore != null && currSong != null) {
+                    mapLineNbSongScore.put(i, new RideDto(currSong, currScore));
+                    currScore = null;
+                    currSong = null;
+                }
+            }
+        }
+        return mapLineNbSongScore;
     }
 }

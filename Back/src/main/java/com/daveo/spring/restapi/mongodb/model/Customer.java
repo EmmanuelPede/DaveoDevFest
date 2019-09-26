@@ -1,12 +1,11 @@
 package com.daveo.spring.restapi.mongodb.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.Date;
 import java.util.List;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -16,12 +15,19 @@ public class Customer {
     private String id;
 
     private String firstName;
+
     private String lastName;
+
     private String email;
+
     private int lastScore;
+
     private int bestScore;
+
     private boolean active;
+
     private Date created;
+
     private Date lastRideDate;
 
     private List<Ride> rideList;
@@ -29,7 +35,7 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(String firstName, int lastScore) {
+    public Customer(final String firstName, final int lastScore) {
         this.firstName = firstName;
         this.lastScore = lastScore;
     }
@@ -41,19 +47,19 @@ public class Customer {
         this.lastScore = lastScore;
     }
 
-	@Override
-	public String toString() {
-		return "Customer{" +
-				"id='" + id + '\'' +
-				", firstName='" + firstName + '\'' +
-				", lastName='" + lastName + '\'' +
-				", email='" + email + '\'' +
-				", lastScore=" + lastScore +
-				", bestScore=" + bestScore +
-				", active=" + active +
-				", created=" + created +
-				", lastRideDate=" + lastRideDate +
-				", rideList=" + rideList +
-				'}';
-	}
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id='" + id + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", lastScore=" + lastScore +
+                ", bestScore=" + bestScore +
+                ", active=" + active +
+                ", created=" + created +
+                ", lastRideDate=" + lastRideDate +
+                ", rideList=" + rideList +
+                '}';
+    }
 }
