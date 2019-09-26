@@ -1,17 +1,21 @@
 package com.daveo.spring.restapi.mongodb.watcher;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardWatchEventKinds;
-import java.nio.file.WatchEvent;
-import java.nio.file.WatchKey;
-import java.nio.file.WatchService;
+import java.nio.file.*;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import com.daveo.spring.restapi.mongodb.parser.RideDto;
+import org.apache.commons.io.monitor.FileAlterationListener;
+import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
+import org.apache.commons.io.monitor.FileAlterationMonitor;
+import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -28,17 +32,20 @@ public class ScoreWatcher {
     @Value("${watcher.audiosurf.output.filename}")
     private String outputFileName;
 
-    @Autowired
-    private ScoreParser scoreParser;
+    private final ScoreParser scoreParser;
 
-    @Autowired
-    ResourceLoader resourceLoader;
+    private final ApplicationEventPublisher eventPublisher;
+
+    private static final int POLL_INTERVAL = 500;
+
+    public ScoreWatcher(ScoreParser scoreParser, ApplicationEventPublisher eventPublisher) {
+        this.scoreParser = scoreParser;
+        this.eventPublisher = eventPublisher;
+    }
 
     @Scheduled(fixedDelay = Long.MAX_VALUE)
     public void watch() {
         try {
-            final WatchService watchService = FileSystems.getDefault().newWatchService();
-
             final String pathString = System.getProperty("user.home") + outputPathDir;
             log.info("[AS2-TRACKER] path string of output file : {}", pathString);
 
@@ -50,30 +57,51 @@ public class ScoreWatcher {
                 directory.mkdir();
             }
 
-            path.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY);
+            final BufferedReader reader = new BufferedReader(new FileReader(pathString + outputFileName));
 
-            WatchKey key;
-            while ((key = watchService.take()) != null) {
-                List<WatchEvent<?>> watchEvents = key.pollEvents();
-                for (WatchEvent<?> event : watchEvents) {
-                    log.info("[AS2-TRACKER] Event kind: {}. File affected: {}.", event.kind(), event.context());
+            FileAlterationObserver observer = new FileAlterationObserver(pathString);
+            FileAlterationMonitor monitor = new FileAlterationMonitor(POLL_INTERVAL);
+            FileAlterationListener listener = new FileAlterationListenerAdaptor() {
+                @Override
+                public void onFileCreate(File file) {
+                    log.info("[AS2-TRACKER] Event kind: {}. File affected: {}.", "onFileCreate", file);
+                }
 
-                    if (event.context() == null || !event.context().toString().equals(outputFileName)) {
-                        log.warn("[AS2-TRACKER] other file has been updated during watch: {}.", event.context());
+                @Override
+                public void onFileDelete(File file) {
+                    log.info("[AS2-TRACKER] Event kind: {}. File affected: {}.", "onFileDelete", file);
+                }
+
+                @Override
+                public void onFileChange(File file) {
+                    // code for processing change event
+                    log.debug("[AS2-TRACKER] Event kind: {}. File affected: {}.", "onFileChange", file);
+
+                    if (file == null || !file.getName().equals(outputFileName)) {
+                        log.warn("[AS2-TRACKER] other file has been updated during watch: {}.", file);
                     } else {
-
-                        final File file = new File(pathString + outputFileName);
                         if (file.exists()) {
-                            final Long lastScore = scoreParser.handleFile(file);
-                            log.info("[AS2-TRACKER] Last score {}.", lastScore);
+                            final RideDto lastRide = scoreParser.handleFile(reader);
+                            log.info("[AS2-TRACKER] Last score : {}.", lastRide);
 
+                            if (lastRide != null) {
+                                log.info("[AS2-TRACKER] Publishing Last score : {}.", lastRide);
+                                eventPublisher.publishEvent(lastRide);
+                            }
                         }
                     }
                 }
-                key.reset();
-            }
+            };
+
+            observer.addListener(listener);
+            monitor.addObserver(observer);
+
+            monitor.start();
+
         } catch (InterruptedException | IOException e) {
             log.error("[AS2-TRACKER] Erreur lors de l'exécution du watcher.", e);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
