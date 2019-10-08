@@ -10,7 +10,7 @@ import org.springframework.web.reactive.config.EnableWebFlux;
 @SpringBootApplication
 public class BackApplication {
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         SpringApplication.run(BackApplication.class, args);
     }
 }

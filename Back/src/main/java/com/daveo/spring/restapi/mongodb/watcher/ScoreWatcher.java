@@ -1,13 +1,14 @@
 package com.daveo.spring.restapi.mongodb.watcher;
 
-import java.io.File;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import lombok.extern.log4j.Log4j2;
+
+import java.io.File;
 
 @Component
 @Log4j2
@@ -21,7 +22,7 @@ public class ScoreWatcher {
 
     @Autowired
     public ScoreWatcher(final ScoreFileAlterationListenerAdaptor scoreFileAlterationListenerAdaptor,
-            @Value("${watcher.audiosurf.output.path:}") final String outputPathDir) {
+                        @Value("${watcher.audiosurf.output.path:}") final String outputPathDir) {
         this.scoreFileAlterationListenerAdaptor = scoreFileAlterationListenerAdaptor;
         this.outputPathDir = outputPathDir;
     }
@@ -29,7 +30,7 @@ public class ScoreWatcher {
     @Scheduled(fixedDelay = Long.MAX_VALUE)
     public void watch() {
 
-        final String pathString = System.getProperty("user.home") + outputPathDir;
+        final String pathString = System.getProperty("user.home") + this.outputPathDir;
         log.info("[AS2-TRACKER] path string of output file : {}", pathString);
 
         final File directory = new File(pathString);
@@ -40,7 +41,7 @@ public class ScoreWatcher {
         try {
             final FileAlterationObserver observer = new FileAlterationObserver(pathString);
             final FileAlterationMonitor monitor = new FileAlterationMonitor(POLL_INTERVAL);
-            observer.addListener(scoreFileAlterationListenerAdaptor);
+            observer.addListener(this.scoreFileAlterationListenerAdaptor);
             monitor.addObserver(observer);
 
             monitor.start();

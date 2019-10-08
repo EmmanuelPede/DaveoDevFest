@@ -1,9 +1,8 @@
 package com.daveo.spring.restapi.mongodb.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import javax.servlet.http.HttpServletResponse;
+import com.daveo.spring.restapi.mongodb.mapper.RideMapper;
+import com.daveo.spring.restapi.mongodb.parser.RideDto;
+import com.daveo.spring.restapi.mongodb.repo.RideRepository;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -11,7 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import com.daveo.spring.restapi.mongodb.parser.RideDto;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * CustomerController
@@ -19,9 +22,24 @@ import com.daveo.spring.restapi.mongodb.parser.RideDto;
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api")
-public class ScoreController {
+public class RideController {
 
     private final CopyOnWriteArrayList<SseEmitter> emitters = new CopyOnWriteArrayList<>();
+
+    private final RideRepository rideRepository;
+
+    private final RideMapper rideMapper;
+
+    public RideController(final RideRepository rideRepository, final RideMapper rideMapper) {
+        this.rideRepository = rideRepository;
+        this.rideMapper = rideMapper;
+    }
+
+    @GetMapping("/last-ride")
+    public RideDto getLastRide() {
+        return this.rideMapper.toRideDto(this.rideRepository.findFirstByOrderByCreatedDesc());
+    }
+
 
     @GetMapping(path = "/score", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter handleScore(final HttpServletResponse response) {
