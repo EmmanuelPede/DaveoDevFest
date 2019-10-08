@@ -11,18 +11,21 @@
       <label>Email: </label> {{this.customer.email}}
     </div>
     <div>
-      <label>Score: </label> {{this.customer.score}}
+      <label>Dernier Score: </label> {{this.customer.lastScore}}
+    </div>
+    <div>
+      <label>Meilleur Score: </label> {{this.customer.bestScore}}
     </div>
     <div>
       <label>Active: </label> {{this.customer.active}}
     </div>
   
-    <span v-if="this.customer.active" v-on:click="updateActive(false)"
-      class="button is-small btn-primary">Inactif</span>
-    <span v-else v-on:click="updateActive(true)"
-      class="button is-small btn-primary">Actif</span>
+    <button v-if="this.customer.active" v-on:click="updateActive(false)"
+      class="button is-small btn-primary">Inactif</button>
+    <button v-else v-on:click="updateActive(true)"
+      class="button is-small btn-primary">Actif</button>
   
-    <span class="button is-small btn-danger" v-on:click="deleteCustomer()">Supprimer</span>
+    <button class="button is-small btn-danger" v-on:click="deleteCustomer()">Supprimer</button>
   </div>
   <div v-else>
     <br/>
@@ -44,7 +47,8 @@ export default {
         firstName: this.customer.firstName,
         lastName: this.customer.lastName,
         email: this.customer.email,
-        score: this.customer.score,
+        lastScore: this.customer.lastScore,
+        bestScore: this.customer.bestScore,
         active: status
       };
 

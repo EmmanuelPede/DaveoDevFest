@@ -52,11 +52,23 @@
             refreshList() {
                 this.retrieveCustomers();
             },
+            getLastRide() {
+                http
+                    .get("/last-ride")
+                    .then(response => {
+                        this.lastRide = response.data; // JSON are parsed automatically.
+                        console.log(response.data);
+                    })
+                    .catch(e => {
+                        console.log(e);
+                    });
+            },
             listenEvent() {
                 const eventSource = new EventSource('http://localhost:8080/api/score');
 
                 eventSource.onmessage = e => {
                     this.lastRide = JSON.parse(e.data);
+                    this.refreshList();
                 };
 
                 eventSource.onopen = e => console.log('open');
@@ -78,6 +90,7 @@
         },
         mounted() {
             this.retrieveCustomers();
+            this.getLastRide();
             this.listenEvent();
         }
     };
