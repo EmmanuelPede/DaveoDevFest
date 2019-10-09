@@ -5,18 +5,19 @@
             <h3 v-if="lastRide">Dernier score : {{lastRide.score}}</h3>
             <h3 v-else>Aucun score pour le moment</h3>
 
-        <div class="list" v-if="customers && customers.length>0">
-            <div class="row" v-for="(customer) in customers" :key="customer.id">
-                <router-link class="item-list" :to="{
+            <div class="list" v-if="customers && customers.length>0">
+                <div class="row" v-for="(customer) in customers" :key="customer.id">
+                    <router-link class="item-list" :to="{
                         name: 'customer-details',
                         params: { customer: customer, id: customer.id }
                     }">
-                    {{customer.firstName}} {{customer.lastName}} - {{customer.lastRide}} pts
-                </router-link>
+                        {{customer.firstName}} {{customer.lastName}} - {{customer.lastRide}} pts
+                    </router-link>
+                </div>
             </div>
-        </div>
-        <div>
-            <router-view @refreshData="refreshList"></router-view>
+            <div>
+                <router-view @refreshData="refreshList"></router-view>
+            </div>
         </div>
     </div>
 </template>
@@ -37,7 +38,7 @@
                         songDuration: '',
                         songArtist: ''
                     },
-                    customerId: ''
+                    customer: {}
                 },
             };
         },
@@ -51,10 +52,10 @@
                         this.customers = response.data; // JSON are parsed automatically.
 
                         const selectedCustomerId = this.$router.currentRoute.params['id'];
-                        console.log('selectedCustomerId', selectedCustomerId);
-                        console.log('this.lastRide', this.lastRide);
 
-                        if (this.customers && this.customers.length > 0 && this.lastRide.customerId === selectedCustomerId) {
+                        if (this.customers && this.customers.length > 0
+                            && this.lastRide.customer && this.lastRide.customer.id === selectedCustomerId) {
+
                             const customer = this.customers.find(customer => customer.id === selectedCustomerId);
                             console.log('customer', customer);
 

@@ -3,6 +3,7 @@ import Vue from "vue";
 export const RideEventSourceService = new Vue({
     data() {
         return {
+            // @ts-ignore
             eventSource: <EventSource> null
         }
     },
