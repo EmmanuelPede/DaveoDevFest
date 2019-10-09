@@ -1,4 +1,4 @@
-package com.daveo.spring.restapi.mongodb.parser;
+package com.daveo.spring.restapi.mongodb.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +20,8 @@ public class RideDto {
 
     private Long key;
 
+    private String customerId;
+
     public RideDto(final SongDto song, final Long score) {
         this.song = song;
         this.score = score;
@@ -30,6 +32,8 @@ public class RideDto {
         return "RideDto{" +
                 "song=" + this.song +
                 ", score=" + this.score +
+                ", key=" + this.key +
+                ", customerId='" + this.customerId + '\'' +
                 '}';
     }
 }

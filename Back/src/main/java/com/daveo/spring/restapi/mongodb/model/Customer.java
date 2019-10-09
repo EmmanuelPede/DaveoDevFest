@@ -8,7 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -35,7 +35,7 @@ public class Customer {
 
     private Date lastRideDate;
 
-    private List<Ride> rideList;
+    private Set<String> rideIdList;
 
     public Customer(final String firstName, final Long lastScore) {
         this.firstName = firstName;
@@ -61,7 +61,7 @@ public class Customer {
                 ", active=" + this.active +
                 ", created=" + this.created +
                 ", lastRideDate=" + this.lastRideDate +
-                ", rideList=" + this.rideList +
+                ", rideList=" + this.rideIdList +
                 '}';
     }
 }

@@ -1,8 +1,8 @@
 package com.daveo.spring.restapi.mongodb.watcher;
 
+import com.daveo.spring.restapi.mongodb.dto.RideDto;
 import com.daveo.spring.restapi.mongodb.model.Customer;
 import com.daveo.spring.restapi.mongodb.model.Ride;
-import com.daveo.spring.restapi.mongodb.parser.RideDto;
 import com.daveo.spring.restapi.mongodb.parser.ScoreParser;
 import com.daveo.spring.restapi.mongodb.repo.CustomerRepository;
 import com.daveo.spring.restapi.mongodb.repo.RideRepository;
@@ -16,8 +16,10 @@ import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.util.ArrayList;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Optional;
 
 @Log4j2
@@ -78,45 +80,59 @@ public class ScoreFileAlterationListenerAdaptor implements FileAlterationListene
         // code for processing change event
         log.debug("[AS2-TRACKER] Event kind: {}. File affected: {}.", "onFileChange", file);
 
-        if (file == null || !file.getName().equals(this.outputFileName)) {
-            log.warn("[AS2-TRACKER] other file has been updated during watch: {}.", file);
-        } else {
-            if (file.exists()) {
-                final RideDto lastRide = this.scoreParser.handleFile(this.reader);
+        try {
+            if (file == null || !file.getName().equals(this.outputFileName)) {
+                log.warn("[AS2-TRACKER] other file has been updated during watch: {}.", file);
+            } else {
+                if (file.exists()) {
+                    final long nbLineOfFile = Files.lines(Paths.get(file.getPath())).count();
+                    final RideDto lastRide = this.scoreParser.handleFile(this.reader, nbLineOfFile);
 
-                if (lastRide != null) {
-                    log.info("[AS2-TRACKER] Publishing Last ride : {}.", lastRide);
+                    if (lastRide != null) {
+                        this.saveLastRide(lastRide);
 
-                    final Customer customer = this.customerRepository.findFirstByActiveTrueOrderByCreatedDesc();
-                    if (customer != null) {
-                        final Optional<Ride> optRide = this.rideRepository.findByKey(lastRide.getKey());
-                        if (optRide.isPresent()) {
-                            final Ride ride = optRide.get();
-                            if (customer.getRideList() == null) {
-                                customer.setRideList(new ArrayList<>());
-                            }
-                            customer.setLastRideDate(new Date());
-                            customer.setLastScore(lastRide.getScore());
+                        log.info("[AS2-TRACKER] Publishing Last ride : {}.", lastRide);
 
-                            ride.setCustomerId(customer.getId());
-                            customer.getRideList().add(ride);
+                        // Publish event of type RideDto
+                        this.eventPublisher.publishEvent(lastRide);
 
-                            if (customer.getBestScore() == null || customer.getBestScore() < lastRide.getScore()) {
-                                customer.setBestScore(lastRide.getScore());
-                            }
-
-                            this.customerRepository.save(customer);
-                            this.rideRepository.save(ride);
-
-                        }
+                    } else {
+                        log.info("[AS2-TRACKER] No new score.");
                     }
-
-                    // Publish event of type RideDto
-                    this.eventPublisher.publishEvent(lastRide);
-
-                } else {
-                    log.info("[AS2-TRACKER] No new score.");
                 }
+            }
+        } catch (final Exception e) {
+            log.error("Error during score parsing", e);
+        }
+    }
+
+    private void saveLastRide(final RideDto lastRide) {
+        log.info("[AS2-TRACKER] Saving Last ride : {}.", lastRide);
+
+        // Get current customer
+        final Customer customer = this.customerRepository.findFirstByActiveTrueOrderByCreatedDesc();
+        if (customer != null) {
+
+            lastRide.setCustomerId(customer.getId());
+
+            final Optional<Ride> optRide = this.rideRepository.findByKey(lastRide.getKey());
+            if (optRide.isPresent()) {
+                final Ride ride = optRide.get();
+                if (customer.getRideIdList() == null) {
+                    customer.setRideIdList(new HashSet<>());
+                }
+                customer.setLastRideDate(new Date());
+                customer.setLastScore(lastRide.getScore());
+
+                ride.setCustomerId(customer.getId());
+                customer.getRideIdList().add(ride.getId());
+
+                if (customer.getBestScore() == null || customer.getBestScore() < lastRide.getScore()) {
+                    customer.setBestScore(lastRide.getScore());
+                }
+
+                this.customerRepository.save(customer);
+                this.rideRepository.save(ride);
             }
         }
     }

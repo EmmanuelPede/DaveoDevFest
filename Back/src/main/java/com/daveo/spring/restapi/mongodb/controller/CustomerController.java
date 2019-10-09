@@ -45,7 +45,7 @@ public class CustomerController {
                         customer.getActive() != null ? customer.getActive() : true,
                         customer.getCreated() != null ? customer.getCreated() : new Date(),
                         customer.getLastRideDate(),
-                        customer.getRideList()
+                        customer.getRideIdList()
                 ));
     }
 
@@ -101,8 +101,8 @@ public class CustomerController {
                 updateCustomer.setLastRideDate(customer.getLastRideDate());
             }
 
-            if (customer.getRideList() != null) {
-                updateCustomer.setRideList(customer.getRideList());
+            if (customer.getRideIdList() != null) {
+                updateCustomer.setRideIdList(customer.getRideIdList());
             }
             return new ResponseEntity<>(this.repository.save(updateCustomer), HttpStatus.OK);
         } else {

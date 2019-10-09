@@ -1,4 +1,4 @@
-package com.daveo.spring.restapi.mongodb.parser;
+package com.daveo.spring.restapi.mongodb.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

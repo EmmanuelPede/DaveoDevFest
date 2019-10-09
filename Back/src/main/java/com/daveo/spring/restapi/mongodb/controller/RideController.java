@@ -1,7 +1,7 @@
 package com.daveo.spring.restapi.mongodb.controller;
 
+import com.daveo.spring.restapi.mongodb.dto.RideDto;
 import com.daveo.spring.restapi.mongodb.mapper.RideMapper;
-import com.daveo.spring.restapi.mongodb.parser.RideDto;
 import com.daveo.spring.restapi.mongodb.repo.RideRepository;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.MediaType;
@@ -60,6 +60,7 @@ public class RideController {
         final List<SseEmitter> deadEmitters = new ArrayList<>();
         this.emitters.forEach(emitter -> {
             try {
+
                 emitter.send(rideDto);
 
                 // close connnection, browser automatically reconnects
