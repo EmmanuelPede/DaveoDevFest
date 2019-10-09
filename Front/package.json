@@ -14,7 +14,7 @@
     "instascan": "^1.0.0",
     "vcard-parser": "^1.0.0",
     "visibilityjs": "^1.2.3",
-    "vue": "^2.5.17",
+    "vue": "2.5.17",
     "vue-class-component": "^7.0.2",
     "vue-property-decorator": "^8.1.0",
     "vue-router": "^3.0.1",

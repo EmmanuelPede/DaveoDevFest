@@ -3,22 +3,22 @@
     <div v-if="!submitted">
         <div class="form-group">
           <label for="firstName">Nom</label>
-          <input type="text" class="form-control" id="firstName" required v-model="customer.firstName" firstName="firstName">
+          <input type="text" class="form-control" id="firstName" required v-model="customer.firstName" name="firstName">
         </div>
 
         <div class="form-group">
-            <label for="firstName">Prénom</label>
-            <input type="text" class="form-control" id="lastName" required v-model="customer.lastName" lastName="lastName">
+            <label for="lastName">Prénom</label>
+            <input type="text" class="form-control" id="lastName" required v-model="customer.lastName" name="lastName">
         </div>
 
         <div class="form-group">
-            <label for="firstName">Email</label>
-            <input type="text" class="form-control" id="email" required v-model="customer.email" lastName="email">
+            <label for="email">Email</label>
+            <input type="text" class="form-control" id="email" required v-model="customer.email" name="email">
         </div>
     
         <div class="form-group">
           <label for="score">Score</label>
-          <input type="number" class="form-control" id="score" required v-model="customer.score" firstName="score">
+          <input type="number" class="form-control" id="score" required v-model="customer.lastScore" name="score">
         </div>
     
         <button v-on:click="saveCustomer" class="btn btn-success">Enregister</button>
@@ -35,7 +35,7 @@
 import http from "../http-common";
 
 export default {
-  firstName: "add-customer",
+  name: "add-customer",
   data() {
     return {
       customer: {
@@ -43,7 +43,7 @@ export default {
         firstName: "",
         lastName: "",
         email: "",
-        score: 0,
+        lastScore: 0,
         active: false
       },
       submitted: false
@@ -52,14 +52,14 @@ export default {
   methods: {
     /* eslint-disable no-console */
     saveCustomer() {
-      var data = {
-        firstName: this.customer.firstName,
-        lastName: this.customer.lastName,
-        email: this.customer.email,
-        score: this.customer.score
-      };
+        const data = {
+            firstName: this.customer.firstName,
+            lastName: this.customer.lastName,
+            email: this.customer.email,
+            lastScore: this.customer.lastScore
+        };
 
-      http
+        http
         .post("/customer", data)
         .then(response => {
           this.customer.id = response.data.id;

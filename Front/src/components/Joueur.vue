@@ -29,7 +29,7 @@
   </div>
   <div v-else>
     <br/>
-    <p>Cliquer sur un joueur</p>
+    <p>Sélectionner sur un joueur</p>
   </div>
 </template>
 
@@ -37,12 +37,12 @@
 import http from "../http-common";
 
 export default {
-  firstName: "customer",
+  name: "customer-details",
   props: ["customer"],
   methods: {
     /* eslint-disable no-console */
     updateActive(status) {
-      var data = {
+      const data = {
         id: this.customer.id,
         firstName: this.customer.firstName,
         lastName: this.customer.lastName,
@@ -75,6 +75,9 @@ export default {
         });
     }
     /* eslint-enable no-console */
+  },
+  mounted() {
+
   }
 };
 </script>

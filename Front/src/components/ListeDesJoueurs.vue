@@ -1,9 +1,11 @@
 <template>
     <div id="resultats">
-        <h2>Résultats</h2>
-        <h3>Dernier résultat : {{lastRide.score}}</h3>
-        <div class="list">
-            <div v-for="(customer, index) in customers" :key="index">
+        <h2>Scoreboard</h2>
+        <h3 v-if="lastRide">Dernier score : {{lastRide.score}}</h3>
+        <h3 v-else>Aucun score pour le moment</h3>
+
+        <div class="list" v-if="customers && customers.length>0">
+            <div v-for="(customer) in customers" :key="customer.id">
                 <router-link class="item-list" :to="{
                         name: 'customer-details',
                         params: { customer: customer, id: customer.id }
@@ -20,9 +22,10 @@
 
 <script>
     import http from "../http-common";
+    import {RideEventSourceService} from "@/services/RideEventSourceService";
 
     export default {
-        firstName: "customers-list",
+        name: "customers-list",
         data() {
             return {
                 customers: [],
@@ -32,21 +35,45 @@
                         songName: '',
                         songDuration: '',
                         songArtist: ''
-                    }
-                }
+                    },
+                    customerId: ''
+                },
             };
         },
         methods: {
             /* eslint-disable no-console */
             retrieveCustomers() {
+                this.customers = [];
                 http
                     .get("/customers")
                     .then(response => {
                         this.customers = response.data; // JSON are parsed automatically.
-                        console.log(response.data);
+
+                        const selectedCustomerId = this.$router.currentRoute.params['id'];
+                        console.log('selectedCustomerId', selectedCustomerId);
+                        console.log('this.lastRide', this.lastRide);
+
+                        if (this.customers && this.customers.length > 0 && this.lastRide.customerId === selectedCustomerId) {
+                            const customer = this.customers.find(customer => customer.id === selectedCustomerId);
+                            console.log('customer', customer);
+
+                            if (customer) {
+                                console.log('pushing route to customer details');
+
+                                this.$router.replace({
+                                    name: 'customer-list',
+                                });
+
+                                this.$router.push({
+                                    name: 'customer-details',
+                                    params: {customer: customer, id: selectedCustomerId}
+                                });
+                            }
+                        }
+                        this.$emit("refreshData");
                     })
                     .catch(e => {
-                        console.log(e);
+                        console.error("Error refreshing player list", e);
                     });
             },
             refreshList() {
@@ -57,33 +84,20 @@
                     .get("/last-ride")
                     .then(response => {
                         this.lastRide = response.data; // JSON are parsed automatically.
-                        console.log(response.data);
                     })
                     .catch(e => {
-                        console.log(e);
+                        console.error("Error getting last ride", e);
                     });
             },
             listenEvent() {
-                const eventSource = new EventSource('http://localhost:8080/api/score');
 
-                eventSource.onmessage = e => {
-                    this.lastRide = JSON.parse(e.data);
+                RideEventSourceService.init();
+
+                RideEventSourceService.$on('lastRide', lastRide => {
+                    console.log('Last Ride Event Received', lastRide);
+                    this.lastRide = JSON.parse(lastRide);
                     this.refreshList();
-                };
-
-                eventSource.onopen = e => console.log('open');
-
-                eventSource.onerror = e => {
-                    if (e.readyState == EventSource.CLOSED) {
-                        console.log('close');
-                    } else {
-                        console.log(e);
-                    }
-                };
-
-                eventSource.addEventListener('second', function (e) {
-                    console.log('second', e.data);
-                }, false);
+                });
             }
 
             /* eslint-enable no-console */
@@ -92,6 +106,10 @@
             this.retrieveCustomers();
             this.getLastRide();
             this.listenEvent();
+        },
+        destroyed() {
+            console.log("destroyed");
+            RideEventSourceService.$off('lastRide');
         }
     };
 </script>

@@ -21,7 +21,7 @@
 import http from "../http-common";
 
 export default {
-  firstName: "search-customer",
+  name: "search-customer",
   data() {
     return {
       email: "",
