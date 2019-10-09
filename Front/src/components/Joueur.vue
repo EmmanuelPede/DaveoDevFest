@@ -13,7 +13,10 @@
       <label>Email: </label> {{this.customer.email}}
     </div>
     <div class="row">
-      <label>Score: </label> {{this.customer.score}}
+      <label>Dernier Score: </label> {{this.customer.lastScore}}
+    </div>
+    <div class="row">
+      <label>Meilleur Score: </label> {{this.customer.bestScore}}
     </div>
     <div class="row">
       <label>Active: </label> {{this.customer.active}}
@@ -27,7 +30,7 @@
 
   <div v-else>
     <br/>
-    <p>Cliquer sur un joueur</p>
+    <p>Sélectionner sur un joueur</p>
   </div>
 </template>
 
@@ -35,17 +38,18 @@
 import http from "../http-common";
 
 export default {
-  firstName: "customer",
+  name: "customer-details",
   props: ["customer"],
   methods: {
     /* eslint-disable no-console */
     updateActive(status) {
-      var data = {
+      const data = {
         id: this.customer.id,
         firstName: this.customer.firstName,
         lastName: this.customer.lastName,
         email: this.customer.email,
-        score: this.customer.score,
+        lastScore: this.customer.lastScore,
+        bestScore: this.customer.bestScore,
         active: status
       };
 
@@ -72,6 +76,9 @@ export default {
         });
     }
     /* eslint-enable no-console */
+  },
+  mounted() {
+
   }
 };
 </script>
