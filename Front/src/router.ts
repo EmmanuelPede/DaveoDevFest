@@ -13,7 +13,7 @@ export default new Router({
   routes: [
     {
       path: "/",
-      name: "joueur",
+      name: "customer-list",
       alias: "/joueur",
       component: CustomersList,
       children: [

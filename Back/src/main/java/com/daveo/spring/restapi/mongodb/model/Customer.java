@@ -1,72 +1,67 @@
 package com.daveo.spring.restapi.mongodb.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+import java.util.Set;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Document(collection = "customer")
 public class Customer {
-	@Id
-	private String id;
+    @Id
+    private String id;
 
-	private String firstName;
-	private String lastName;
-	private String email;
-	private int score;
-	private boolean active;
+    private String firstName;
 
-	public Customer() {
-	}
+    private String lastName;
 
-	public Customer(String firstName, int score) {
-		this.firstName = firstName;
-		this.score = score;
-	}
+    private String email;
 
-	public Customer(final String firstName, final String lastName, final String email, final int score) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.score = score;
-	}
+    private Long lastScore;
 
-	public String getId() {
-		return id;
-	}
+    private Long bestScore;
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+    private Boolean active;
 
-	public String getFirstName() {
-		return this.firstName;
-	}
+    private Date created;
 
-	public String getLastName() { return lastName; }
+    private Date lastRideDate;
 
-	public void setLastName(final String lastName) { this.lastName = lastName; }
+    private Set<String> rideIdList;
 
-	public String getEmail() { return email; }
+    public Customer(final String firstName, final Long lastScore) {
+        this.firstName = firstName;
+        this.lastScore = lastScore;
+    }
 
-	public void setEmail(final String email) { this.email = email; }
+    public Customer(final String firstName, final String lastName, final String email, final Long lastScore) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.lastScore = lastScore;
+    }
 
-	public void setScore(int score) {
-		this.score = score;
-	}
-
-	public int getScore() {
-		return this.score;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
-	@Override
-	public String toString() {
-		return "Customer [id=" + id + ", firstName=" + firstName + ", score=" + score + ", active=" + active + "]";
-	}
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id='" + this.id + '\'' +
+                ", firstName='" + this.firstName + '\'' +
+                ", lastName='" + this.lastName + '\'' +
+                ", email='" + this.email + '\'' +
+                ", lastScore=" + this.lastScore +
+                ", bestScore=" + this.bestScore +
+                ", active=" + this.active +
+                ", created=" + this.created +
+                ", lastRideDate=" + this.lastRideDate +
+                ", rideList=" + this.rideIdList +
+                '}';
+    }
 }
