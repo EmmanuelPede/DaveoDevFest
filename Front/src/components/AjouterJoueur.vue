@@ -1,5 +1,6 @@
 <template>
-  <div class="submitform">
+  <div class="container">
+  <h2>Ajouter un joueur manuellement</h2>
     <div v-if="!submitted">
         <div class="form-group">
           <label for="firstName">Nom</label>
@@ -21,11 +22,11 @@
           <input type="number" class="form-control" id="score" required v-model="customer.score" firstName="score">
         </div>
     
-        <button v-on:click="saveCustomer" class="btn btn-success">Enregister</button>
+        <button v-on:click="saveCustomer" class="btn">Enregister</button>
     </div>
     
     <div v-else>
-      <h4>You submitted successfully!</h4>
+      <h4>Le joueur est ajouté à la liste!</h4>
       <button class="btn btn-success" v-on:click="newCustomer">Ajouter un nouveau joueur</button>
     </div>
   </div>

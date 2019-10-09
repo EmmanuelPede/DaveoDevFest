@@ -4,6 +4,7 @@ body, html {
   font-family: 'Helvetica Neue', 'Calibri', Arial, sans-serif;
   height: 100%;
   background: #eaeaea;
+  color:white;
 }
 #app {
   background: #263238;
@@ -151,4 +152,10 @@ body, html {
   color: #ffffff;
   text-align: center;
   margin: 0 20px;
+}
+
+.btn {
+    color:white;
+    background-color: #D54972;
+    border-color:#D54972;
 }

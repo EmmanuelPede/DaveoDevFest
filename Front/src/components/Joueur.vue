@@ -1,29 +1,30 @@
 <template>
-  <div v-if="this.customer">
-    <h4>Joueur</h4>
-    <div>
+  <div class="container" v-if="this.customer">
+    <div class="row">
+        <h4>Joueur</h4>
+    </div>
+    <div class="row">
       <label>Nom: </label> {{this.customer.firstName}}
     </div>
-    <div>
+    <div class="row">
       <label>Prénom: </label> {{this.customer.lastName}}
     </div>
-    <div>
+    <div class="row">
       <label>Email: </label> {{this.customer.email}}
     </div>
-    <div>
+    <div class="row">
       <label>Score: </label> {{this.customer.score}}
     </div>
-    <div>
+    <div class="row">
       <label>Active: </label> {{this.customer.active}}
     </div>
-  
-    <span v-if="this.customer.active" v-on:click="updateActive(false)"
-      class="button is-small btn-primary">Inactif</span>
-    <span v-else v-on:click="updateActive(true)"
-      class="button is-small btn-primary">Actif</span>
-  
-    <span class="button is-small btn-danger" v-on:click="deleteCustomer()">Supprimer</span>
+    <div class="row">
+        <div v-if="this.customer.active" v-on:click="updateActive(false)" class="btn">Inactif</div>
+        <div v-else v-on:click="updateActive(true)" class="btn">Actif</div>
+        <div class="btn" v-on:click="deleteCustomer()">Supprimer</div>
+    </div>
   </div>
+
   <div v-else>
     <br/>
     <p>Cliquer sur un joueur</p>

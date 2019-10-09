@@ -84,6 +84,9 @@ export default {
             this.activeCameraId = camera.id;
             this.scanner.start(camera);
         },
+        parseVCard: function(vCard) {
+            var name = card.n[0].value[0] || "";
+        },
         saveCustomer: function (contentScan) {
             var vCard = require('vcard-parser');
             console.info(contentScan);

@@ -1,13 +1,13 @@
 <template>
     <div id="resultats">
         <h2>Résultats</h2>
-        <div class="list">
-            <div v-for="(customer, index) in customers" :key="index">
+        <div class="container">
+            <div class="row" v-for="(customer, index) in customers" :key="index">
                 <router-link class="item-list" :to="{
                         name: 'customer-details',
                         params: { customer: customer, id: customer.id }
                     }">
-                        {{customer.firstName}} {{customer.lastName}} - {{customer.score}}
+                        {{customer.firstName}} {{customer.lastName}} - {{customer.score}} pts
                 </router-link>
             </div>
         </div>

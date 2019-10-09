@@ -1,19 +1,21 @@
 <template>
   <div class="searchform">
+  <div class="container">
     <h4>Rechercher par email</h4>
     <div class="form-group">
       <input class="form-control" id="email" required v-model="email" email="email">
     </div>
  
     <div class="btn-group">
-      <button v-on:click="searchCustomersByEmail" class="btn btn-success">Recherche</button>
+      <button v-on:click="searchCustomersByEmail" class="btn">Recherche</button>
     </div>
 
-    <ul class="search-result">
-      <li v-for="(customer, index) in customers" :key="index">
-        <h6>{{customer.firstName}} {{customer.lastName}} ({{customer.score}})</h6>
-      </li>
-    </ul>
+    <div class="container search-result">
+      <div class="row" v-for="(customer, index) in customers" :key="index">
+        {{customer.firstName}} {{customer.lastName}} ({{customer.score}} pts)
+      </div>
+    </div>
+  </div>
   </div>
 </template>
 
