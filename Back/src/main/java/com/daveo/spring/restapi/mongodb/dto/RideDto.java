@@ -20,7 +20,7 @@ public class RideDto {
 
     private Long key;
 
-    private String customerId;
+    private CustomerDto customer;
 
     public RideDto(final SongDto song, final Long score) {
         this.song = song;
@@ -33,7 +33,7 @@ public class RideDto {
                 "song=" + this.song +
                 ", score=" + this.score +
                 ", key=" + this.key +
-                ", customerId='" + this.customerId + '\'' +
+                ", customer=" + this.customer +
                 '}';
     }
 }

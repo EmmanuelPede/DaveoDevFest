@@ -1,6 +1,7 @@
 package com.daveo.spring.restapi.mongodb.watcher;
 
 import com.daveo.spring.restapi.mongodb.dto.RideDto;
+import com.daveo.spring.restapi.mongodb.mapper.CustomerMapper;
 import com.daveo.spring.restapi.mongodb.model.Customer;
 import com.daveo.spring.restapi.mongodb.model.Ride;
 import com.daveo.spring.restapi.mongodb.parser.ScoreParser;
@@ -38,17 +39,20 @@ public class ScoreFileAlterationListenerAdaptor implements FileAlterationListene
 
     private final RideRepository rideRepository;
 
+    private final CustomerMapper customerMapper;
+
     @Autowired
     public ScoreFileAlterationListenerAdaptor(final ScoreParser scoreParser,
                                               final ApplicationEventPublisher eventPublisher,
                                               final BufferedReader bufferedReader,
-                                              @Value("${watcher.audiosurf.output.filename}") final String outputFileName, final CustomerRepository customerRepository, final RideRepository rideRepository) {
+                                              @Value("${watcher.audiosurf.output.filename}") final String outputFileName, final CustomerRepository customerRepository, final RideRepository rideRepository, final CustomerMapper customerMapper) {
         this.scoreParser = scoreParser;
         this.eventPublisher = eventPublisher;
         this.reader = bufferedReader;
         this.outputFileName = outputFileName;
         this.customerRepository = customerRepository;
         this.rideRepository = rideRepository;
+        this.customerMapper = customerMapper;
     }
 
     @Override
@@ -113,7 +117,7 @@ public class ScoreFileAlterationListenerAdaptor implements FileAlterationListene
         final Customer customer = this.customerRepository.findFirstByActiveTrueOrderByCreatedDesc();
         if (customer != null) {
 
-            lastRide.setCustomerId(customer.getId());
+            lastRide.setCustomer(this.customerMapper.toCustomerDto(customer));
 
             final Optional<Ride> optRide = this.rideRepository.findByKey(lastRide.getKey());
             if (optRide.isPresent()) {

@@ -2,6 +2,9 @@ package com.daveo.spring.restapi.mongodb.controller;
 
 import com.daveo.spring.restapi.mongodb.dto.RideDto;
 import com.daveo.spring.restapi.mongodb.mapper.RideMapper;
+import com.daveo.spring.restapi.mongodb.model.Customer;
+import com.daveo.spring.restapi.mongodb.model.Ride;
+import com.daveo.spring.restapi.mongodb.repo.CustomerRepository;
 import com.daveo.spring.restapi.mongodb.repo.RideRepository;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.MediaType;
@@ -15,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Function;
 
 /**
  * CustomerController
@@ -26,18 +30,27 @@ public class RideController {
 
     private final CopyOnWriteArrayList<SseEmitter> emitters = new CopyOnWriteArrayList<>();
 
-    private final RideRepository rideRepository;
+    private final RideRepository repo;
+
+    private final CustomerRepository customerRepo;
 
     private final RideMapper rideMapper;
 
-    public RideController(final RideRepository rideRepository, final RideMapper rideMapper) {
-        this.rideRepository = rideRepository;
+    public RideController(final RideRepository repo, final CustomerRepository customerRepo, final RideMapper rideMapper) {
+        this.repo = repo;
+        this.customerRepo = customerRepo;
         this.rideMapper = rideMapper;
     }
 
     @GetMapping("/last-ride")
     public RideDto getLastRide() {
-        return this.rideMapper.toRideDto(this.rideRepository.findFirstByOrderByCreatedDesc());
+        final Ride ride = this.repo.findFirstByOrderByCreatedDesc();
+
+        Function<String, Customer> customerFonction = null;
+        if (ride != null && ride.getCustomerId() != null) {
+            customerFonction = id -> this.customerRepo.findById(id).orElse(null);
+        }
+        return this.rideMapper.toRideDto(ride, customerFonction);
     }
 
 
