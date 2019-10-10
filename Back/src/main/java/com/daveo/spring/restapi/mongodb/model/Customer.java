@@ -37,6 +37,8 @@ public class Customer {
 
     private Set<String> rideIdList;
 
+    private String vCard;
+
     public Customer(final String firstName, final Long lastScore) {
         this.firstName = firstName;
         this.lastScore = lastScore;

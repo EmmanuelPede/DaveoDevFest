@@ -15,8 +15,8 @@ public class AppConfig {
 
     private final String outputFileName;
 
-    public AppConfig(@Value("${watcher.audiosurf.output.path:}") final String outputPathDir,
-            @Value("${watcher.audiosurf.output.filename}") final String outputFileName) {
+    public AppConfig(@Value("/output/") final String outputPathDir,
+            @Value("output_log.txt") final String outputFileName) {
         this.outputPathDir = outputPathDir;
         this.outputFileName = outputFileName;
     }

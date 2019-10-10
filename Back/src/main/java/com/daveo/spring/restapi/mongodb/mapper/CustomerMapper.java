@@ -24,6 +24,7 @@ public class CustomerMapper {
         customerDto.setActive(customer.getActive());
         customerDto.setCreated(customer.getCreated());
         customerDto.setLastRideDate(customer.getLastRideDate());
+        customerDto.setVCard(customer.getVCard());
 
         return customerDto;
     }

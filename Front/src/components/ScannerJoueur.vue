@@ -84,18 +84,61 @@ export default {
             this.activeCameraId = camera.id;
             this.scanner.start(camera);
         },
-        parseVCard: function(vCard) {
-            var name = card.n[0].value[0] || "";
+        parseVCard: function(contentScan) {
+            var Re1 = /^(version|fn|title|org):(.+)$/i;
+            var Re2 = /^([^:;]+);([^:]+):(.+)$/;
+            var ReKey = /item\d{1,2}\./;
+            var fields = {};
+
+            input.split(/\r\n|\r|\n/).forEach(function (line) {
+                var results, key;
+
+                if (Re1.test(line)) {
+                    results = line.match(Re1);
+                    key = results[1].toLowerCase();
+                    fields[key] = results[2];
+                } else if (Re2.test(line)) {
+                    results = line.match(Re2);
+                    key = results[1].replace(ReKey, '').toLowerCase();
+
+                    var meta = {};
+                    results[2].split(';')
+                        .map(function (p, i) {
+                            var match = p.match(/([a-z]+)=(.*)/i);
+                            if (match) {
+                                return [match[1], match[2]];
+                            } else {
+                                return ["TYPE" + (i === 0 ? "" : i), p];
+                            }
+                        })
+                        .forEach(function (p) {
+                            meta[p[0]] = p[1];
+                        });
+
+                    if (!fields[key]) fields[key] = [];
+
+                    fields[key].push({
+                        meta: meta,
+                        value: results[3].split(';')
+                    })
+                }
+            });
+
+            return fields;
+        },
+        getFirstName: function (fn) {
+
         },
         saveCustomer: function (contentScan) {
-            var vCard = require('vcard-parser');
             console.info(contentScan);
-            var card = vCard.parse(contentScan);
-            console.info(card.n[0]);
-            console.info(card.n[0].value[0]);
+            var card = this.parseVCard(contentScan);
+            console.info(card.fn);
+            console.info(card.org)
+            console.info(card.email.value);
             var data = {
                 firstName: card.n[0].value[0] || "",
-                lastName: card.n[0].value[1] || ""
+                lastName: card.n[0].value[1] || "",
+                vCard: contentScan
             };
             console.info(data);
           http.post("/customer", data)

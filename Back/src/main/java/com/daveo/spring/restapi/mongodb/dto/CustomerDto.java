@@ -27,6 +27,8 @@ public class CustomerDto {
 
     private Date lastRideDate;
 
+    private String vCard;
+
     @Override
     public String toString() {
         return "CustomerDto{" +
