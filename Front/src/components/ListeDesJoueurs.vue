@@ -25,19 +25,26 @@
                 Les meilleurs joueurs
             </h1>
             <ol>
-                <li v-for="(customer) in customers" :key="customer.id">
-                    <router-link class="item-list" :to="{
+                <li v-for="index in 10" :key="index">
+                    <div v-if="customers[index-1]">
+                        <router-link class="item-list" :to="{
                             name: 'customer-details',
-                            params: { customer: customer, id: customer.id }
+                            params: { customer: customers[index-1], id: customers[index-1].id }
                         }">
-                        <mark>
-                            {{customer.firstName}} {{customer.lastName}}
-                        </mark>
-                        <small v-if="customer.bestScore">{{customer.bestScore}} pts</small>
-                        <small v-else>0 pts</small>
-                    </router-link>
+                            <mark>
+                                {{customers[index-1].firstName}} {{customers[index-1].lastName}}
+                            </mark>
+                            <small>
+                                <span v-if="customers[index-1].bestScore">{{customers[index-1].bestScore}} pts</span>
+                                <span v-else>0 pts</span>
+                            </small>
+                        </router-link>
+                    </div>
+                    <div v-else>
+                        <mark>--</mark>
+                        <small>0 pts</small>
+                    </div>
                 </li>
-
             </ol>
         </div>
         <div v-else>Aucun score pour le moment</div>
@@ -82,10 +89,8 @@
                             && this.lastRide.customer && this.lastRide.customer.id === selectedCustomerId) {
 
                             const customer = this.customers.find(customer => customer.id === selectedCustomerId);
-                            console.log('customer', customer);
 
                             if (customer) {
-                                console.log('pushing route to customer details');
 
                                 this.$router.replace({
                                     name: 'customer-list',
