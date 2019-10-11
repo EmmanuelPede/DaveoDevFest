@@ -127,13 +127,6 @@ body, html {
   text-align: center;
 }
 
-.item-list{
-  width: 100%;
-  color: #eaeaea;
-  text-align: center;
-  margin : 10px;
-}
-
 .submitform {
   flex-direction: column;
   display: flex;
@@ -214,6 +207,9 @@ body, html {
   border-radius: 20px;
   text-align: center;
 }
+.leaderboard ol li a {
+  text-decoration: none!important;
+}
 .leaderboard ol li mark {
   position: absolute;
   z-index: 2;
@@ -249,6 +245,8 @@ body, html {
   z-index: 2;
   display: block;
   text-align: right;
+  color: white;
+  text-decoration: none !important;
 }
 .leaderboard ol li::after {
   content: '';
