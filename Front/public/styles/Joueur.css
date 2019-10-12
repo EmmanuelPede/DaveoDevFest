@@ -1,9 +1,25 @@
 .player-details {
 /*    border-radius: 10px;
     box-shadow: 0 7px 30px rgba(62, 9, 11, 0.3);*/
-
-
     display: flex;
     justify-content: center;
     height: 100%;
 }
+
+.player-details div{
+    width: 100%;
+}
+
+.player-details .heading {
+    background: #D54972;
+    width: 100%;
+}
+
+.player-details .group {
+    margin-bottom: 30px;
+}
+
+.player-details .group label.col {
+    margin-bottom: 0;
+}
+

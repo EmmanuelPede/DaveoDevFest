@@ -1,43 +1,46 @@
 <template>
     <div class="player-details">
-        <div class="d-flex flex-column justify-content-center container" v-if="this.customer">
+        <div class="d-flex flex-column justify-content-center" v-if="this.customer">
             <div class="d-flex flex-row">
-                <h4 class="col mt-4 mb-4 text-left">{{this.customer.firstName}} {{this.customer.lastName}}</h4>
+                <h4 class="col pt-4 pb-4 mb-4 text-left heading">{{this.customer.firstName}} {{this.customer.lastName}}</h4>
             </div>
-            <div class="d-flex flex-row">
-                <label class="col text-left">Email: </label>
-                <label class="col text-left">{{this.customer.email}}</label>
+            <div class="d-flex flex-column group">
+                <label class="col">Email</label>
+                <span class="col">{{this.customer.email}}</span>
             </div>
-            <div class="d-flex flex-row">
-                <label class="col text-left">Dernier Score: </label>
-                <label class="col text-left">
+            <div class="d-flex flex-column group">
+                <label class="col">Dernier Score</label>
+                <span class="col">
                     <span v-if="this.customer.lastScore">{{this.customer.lastScore}}</span>
                     <span v-else>0</span>
                     pt(s)
-                </label>
+                </span>
             </div>
-            <div class="d-flex flex-row">
-                <label class="col text-left">Meilleur Score: </label>
-                <label class="col text-left">
+            <div class="d-flex flex-column group">
+                <label class="col">Meilleur Score</label>
+                <span class="col">
                     <span v-if="this.customer.bestScore">{{this.customer.bestScore}}</span>
                     <span v-else>0</span>
                     pt(s)
-                </label>
+                </span>
             </div>
-            <div class="d-flex flex-row">
-                <label class="col text-left">Active: </label>
+            <div class="d-flex flex-column group">
+                <label class="col">
+                    <span v-if="this.customer.active">Actif</span>
+                    <span v-else>Inactif</span>
+                </label>
 
-                <label class="col text-left">
+                <span class="col">
                     <!-- Default checked -->
                     <span class="custom-control custom-switch">
                         <input type="checkbox" class="custom-control-input" id="customSwitch1"
                                :checked="this.customer.active" v-on:change="updateActive(!customer.active)">
                         <label class="custom-control-label" for="customSwitch1"></label>
                     </span>
-                </label>
+                </span>
 
             </div>
-            <div class="d-flex flex-row mb-4 mt-4">
+            <div class="d-flex flex-row mb-4 mt-2">
                 <div class="col justify-content-center">
                     <button class="btn" v-on:click="deleteCustomer()">Supprimer</button>
                 </div>
