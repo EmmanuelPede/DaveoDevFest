@@ -31,7 +31,7 @@
                     <!-- Default checked -->
                     <span class="custom-control custom-switch">
                         <input type="checkbox" class="custom-control-input" id="customSwitch1"
-                               :checked="this.customer.active">
+                               :checked="this.customer.active" v-on:change="updateActive(!customer.active)">
                         <label class="custom-control-label" for="customSwitch1"></label>
                     </span>
                 </label>
@@ -39,11 +39,6 @@
             </div>
             <div class="d-flex flex-row mb-4 mt-4">
                 <div class="col justify-content-center">
-                    <button v-on:click="updateActive(!customer.active)" class="btn mr-2">
-                        <span v-if="this.customer.active">Inactif</span>
-                        <span v-else>Actif</span>
-                    </button>
-
                     <button class="btn" v-on:click="deleteCustomer()">Supprimer</button>
                 </div>
             </div>
