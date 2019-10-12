@@ -1,38 +1,52 @@
 <template>
-    <div class="player-container">
-        <div class="d-flex flex-column" v-if="this.customer">
-            <div class="row">
-                <h4>Joueur</h4>
+    <div class="player-details">
+        <div class="d-flex flex-column justify-content-center container" v-if="this.customer">
+            <div class="d-flex flex-row">
+                <h4 class="col mt-4 mb-4 text-left">{{this.customer.firstName}} {{this.customer.lastName}}</h4>
             </div>
-            <div class="row">
-                <label>Nom: </label> {{this.customer.firstName}}
+            <div class="d-flex flex-row">
+                <label class="col text-left">Email: </label>
+                <label class="col text-left">{{this.customer.email}}</label>
             </div>
-            <div class="row">
-                <label>Prénom: </label> {{this.customer.lastName}}
+            <div class="d-flex flex-row">
+                <label class="col text-left">Dernier Score: </label>
+                <label class="col text-left">
+                    <span v-if="this.customer.lastScore">{{this.customer.lastScore}}</span>
+                    <span v-else>0</span>
+                    pt(s)
+                </label>
             </div>
-            <div class="row">
-                <label>Email: </label> {{this.customer.email}}
+            <div class="d-flex flex-row">
+                <label class="col text-left">Meilleur Score: </label>
+                <label class="col text-left">
+                    <span v-if="this.customer.bestScore">{{this.customer.bestScore}}</span>
+                    <span v-else>0</span>
+                    pt(s)
+                </label>
             </div>
-            <div class="row">
-                <label>Dernier Score: </label> {{this.customer.lastScore}}
-            </div>
-            <div class="row">
-                <label>Meilleur Score: </label> {{this.customer.bestScore}}
-            </div>
-            <div class="row">
-                <label>Active: </label> {{this.customer.active}}
-            </div>
-            <div class="row">
-                <div v-if="this.customer.active" v-on:click="updateActive(false)" class="btn">Inactif</div>
-                <div v-else v-on:click="updateActive(true)" class="btn">Actif</div>
-                <div class="btn" v-on:click="deleteCustomer()">Supprimer</div>
-            </div>
-        </div>
+            <div class="d-flex flex-row">
+                <label class="col text-left">Active: </label>
 
+                <label class="col text-left">
+                    <!-- Default checked -->
+                    <span class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch1"
+                               :checked="this.customer.active">
+                        <label class="custom-control-label" for="customSwitch1"></label>
+                    </span>
+                </label>
 
-        <div v-else>
-            <br/>
-            <p>Sélectionner sur un joueur</p>
+            </div>
+            <div class="d-flex flex-row mb-4 mt-4">
+                <div class="col justify-content-center">
+                    <button v-on:click="updateActive(!customer.active)" class="btn mr-2">
+                        <span v-if="this.customer.active">Inactif</span>
+                        <span v-else>Actif</span>
+                    </button>
+
+                    <button class="btn" v-on:click="deleteCustomer()">Supprimer</button>
+                </div>
+            </div>
         </div>
     </div>
 </template>

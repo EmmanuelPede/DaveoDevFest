@@ -24,7 +24,7 @@
                 </svg>
                 Les meilleurs joueurs
             </h1>
-            <ol>
+            <ol v-on:click="onClick">
                 <li v-for="index in 10" :key="index">
                     <div v-if="customers[index-1]">
                         <router-link class="item-list" :to="{
@@ -49,8 +49,10 @@
         </div>
         <div v-else>Aucun score pour le moment</div>
 
-        <router-view></router-view>
-    </div>
+        <div class="player-container" :data-hidden="this.hidden ? 'hidden' : ''" v-on:transitionend="transitionend()">
+            <router-view v-if="show"></router-view>
+        </div>
+    </div >
 
 </template>
 
@@ -71,7 +73,9 @@
                         songArtist: ''
                     },
                     customer: {}
-                }
+                },
+                show: false,
+                hidden: true
             };
         },
         methods: {
@@ -122,7 +126,6 @@
                     });
             },
             listenEvent() {
-
                 RideEventSourceService.init();
 
                 RideEventSourceService.$on('lastRide', lastRide => {
@@ -130,6 +133,16 @@
                     this.lastRide = JSON.parse(lastRide);
                     this.refreshList();
                 });
+            },
+            transitionend() {
+                this.show = !this.hidden;
+            },
+
+            onClick() {
+                this.hidden = !this.hidden;
+                if (this.hidden === true) {
+                    this.show = false;
+                }
             }
 
             /* eslint-enable no-console */

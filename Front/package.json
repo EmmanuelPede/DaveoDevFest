@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.18.1",
     "babel-polyfill": "^6.9.1",
+    "bootstrap": "^4.3.1",
     "fsm-as-promised": "^0.13.0",
     "instascan": "^1.0.0",
     "vcard-parser": "^1.0.0",
@@ -34,6 +35,8 @@
     "gulp": "^4.0.2",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.5.4",
+    "sass": "^1.23.0",
+    "sass-loader": "^8.0.0",
     "typescript": "^3.4.3",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
