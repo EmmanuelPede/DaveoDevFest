@@ -21,18 +21,14 @@
     width: 0;
 }
 
-.player-container {
-    flex-grow: 0.0001;
-    overflow: hidden;
-    height:100%;
-    max-width: 300px;
-    position: relative;
+#sidebar-wrapper {
     background: -webkit-linear-gradient(top, #3a404d, #181c26);
     background: linear-gradient(to bottom, #3a404d, #181c26);
-}
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 7px 30px rgba(62, 9, 11, 0.3);
 
-.player-container > div {
-    transition: all .25s ease-in-out;
 }
 
 .leaderboard {

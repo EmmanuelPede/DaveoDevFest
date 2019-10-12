@@ -29,7 +29,7 @@ public class CustomerController {
 
     @GetMapping("/customers")
     public List<Customer> getAllCustomers() {
-        return new ArrayList<>(this.repository.findAll());
+        return new ArrayList<>(this.repository.findAllByOrderByBestScoreDesc());
     }
 
     @PostMapping("/customer")
@@ -41,7 +41,7 @@ public class CustomerController {
                         customer.getLastName(),
                         customer.getEmail(),
                         customer.getLastScore(),
-                        customer.getBestScore(),
+                        customer.getBestScore() != null ? customer.getBestScore() : customer.getLastScore(),
                         customer.getActive() != null ? customer.getActive() : true,
                         customer.getCreated() != null ? customer.getCreated() : new Date(),
                         customer.getLastRideDate(),

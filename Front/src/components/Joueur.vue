@@ -34,7 +34,7 @@
                     <!-- Default checked -->
                     <span class="custom-control custom-switch">
                         <input type="checkbox" class="custom-control-input" id="customSwitch1"
-                               v-model="active" v-on:change="updateActive()">
+                               v-model="customer.active" v-on:change="updateActive()">
                         <label class="custom-control-label" for="customSwitch1"></label>
                     </span>
                 </span>
@@ -55,14 +55,9 @@
     export default {
         name: "customer-details",
         props: ["customer"],
-        data(){
-            return {
-                active: this.customer.active || false
-            }
-        },
         methods: {
             /* eslint-disable no-console */
-            updateActive(status) {
+            updateActive() {
                 const data = {
                     id: this.customer.id,
                     firstName: this.customer.firstName,
@@ -70,14 +65,15 @@
                     email: this.customer.email,
                     lastScore: this.customer.lastScore,
                     bestScore: this.customer.bestScore,
-                    active: this.active
+                    active: this.customer.active
                 };
 
                 http
                     .put("/customer/" + this.customer.id, data)
                     .then(response => {
-                        this.customer.active = response.data.active;
                         console.log(response.data);
+
+                        this.customer.active = response.data.active;
                     })
                     .catch(e => {
                         console.log(e);
