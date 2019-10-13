@@ -85,12 +85,12 @@ export default {
             this.scanner.start(camera);
         },
         parseVCard: function(contentScan) {
-            var Re1 = /^(version|fn|title|org):(.+)$/i;
+            var Re1 = /^(version|n|fn|title|org):(.+)$/i;
             var Re2 = /^([^:;]+);([^:]+):(.+)$/;
             var ReKey = /item\d{1,2}\./;
             var fields = {};
 
-            input.split(/\r\n|\r|\n/).forEach(function (line) {
+            contentScan.split(/\r\n|\r|\n/).forEach(function (line) {
                 var results, key;
 
                 if (Re1.test(line)) {
@@ -126,19 +126,18 @@ export default {
 
             return fields;
         },
-        getFirstName: function (fn) {
-
+        getName: function (fn) {
+            return fn.replace(';',' ');
         },
         saveCustomer: function (contentScan) {
             console.info(contentScan);
+            console.info("contentScan : " + contentScan);
             var card = this.parseVCard(contentScan);
-            console.info(card.fn);
-            console.info(card.org)
-            console.info(card.email.value);
+            console.info("vCard : " + JSON.stringify(card));
             var data = {
-                firstName: card.n[0].value[0] || "",
-                lastName: card.n[0].value[1] || "",
-                vCard: contentScan
+                name: this.getName(card.n) || this.getName(card.fn) || "",
+                email: card.email || "",
+                vCard: contentScan || ""
             };
             console.info(data);
           http.post("/customer", data)

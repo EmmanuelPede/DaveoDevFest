@@ -3,13 +3,8 @@
   <h2>Ajouter un joueur manuellement</h2>
     <div v-if="!submitted">
         <div class="form-group">
-          <label for="firstName">Nom</label>
-          <input type="text" class="form-control" id="firstName" required v-model="customer.firstName" name="firstName">
-        </div>
-
-        <div class="form-group">
-            <label for="lastName">Prénom</label>
-            <input type="text" class="form-control" id="lastName" required v-model="customer.lastName" name="lastName">
+          <label for="firstName">Nom & Prénom</label>
+          <input type="text" class="form-control" id="name" required v-model="customer.name" name="name">
         </div>
 
         <div class="form-group">
@@ -41,8 +36,7 @@ export default {
     return {
       customer: {
         id: 0,
-        firstName: "",
-        lastName: "",
+        name: "",
         email: "",
         lastScore: 0,
         active: false
@@ -54,8 +48,7 @@ export default {
     /* eslint-disable no-console */
     saveCustomer() {
         const data = {
-            firstName: this.customer.firstName,
-            lastName: this.customer.lastName,
+            name: this.customer.name,
             email: this.customer.email,
             lastScore: this.customer.lastScore
         };

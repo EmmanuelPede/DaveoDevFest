@@ -11,9 +11,7 @@ public class CustomerDto {
 
     private String id;
 
-    private String firstName;
-
-    private String lastName;
+    private String name;
 
     private String email;
 
@@ -33,8 +31,7 @@ public class CustomerDto {
     public String toString() {
         return "CustomerDto{" +
                 "id='" + this.id + '\'' +
-                ", firstName='" + this.firstName + '\'' +
-                ", lastName='" + this.lastName + '\'' +
+                ", name='" + this.name + '\'' +
                 ", email='" + this.email + '\'' +
                 ", lastScore=" + this.lastScore +
                 ", bestScore=" + this.bestScore +

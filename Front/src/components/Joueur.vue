@@ -5,10 +5,7 @@
                 <h4>Joueur</h4>
             </div>
             <div class="row">
-                <label>Nom: </label> {{this.customer.firstName}}
-            </div>
-            <div class="row">
-                <label>Prénom: </label> {{this.customer.lastName}}
+                <label>Nom & Prénom: </label> {{this.customer.name}}
             </div>
             <div class="row">
                 <label>Email: </label> {{this.customer.email}}
@@ -48,8 +45,7 @@
             updateActive(status) {
                 const data = {
                     id: this.customer.id,
-                    firstName: this.customer.firstName,
-                    lastName: this.customer.lastName,
+                    name: this.customer.name,
                     email: this.customer.email,
                     lastScore: this.customer.lastScore,
                     bestScore: this.customer.bestScore,

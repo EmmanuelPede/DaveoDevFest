@@ -16,8 +16,7 @@ public class CustomerMapper {
 
         customerDto.setId(customer.getId());
 
-        customerDto.setFirstName(customer.getFirstName());
-        customerDto.setLastName(customer.getLastName());
+        customerDto.setName(customer.getName());
         customerDto.setEmail(customer.getEmail());
         customerDto.setLastScore(customer.getLastScore());
         customerDto.setBestScore(customer.getBestScore());

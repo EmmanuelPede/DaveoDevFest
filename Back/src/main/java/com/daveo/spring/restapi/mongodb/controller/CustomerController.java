@@ -37,8 +37,7 @@ public class CustomerController {
         return this.repository
                 .save(new Customer(
                         customer.getId(),
-                        customer.getFirstName(),
-                        customer.getLastName(),
+                        customer.getName(),
                         customer.getEmail(),
                         customer.getLastScore(),
                         customer.getBestScore(),
@@ -56,9 +55,9 @@ public class CustomerController {
         return new ResponseEntity<>("Customer has been deleted!", HttpStatus.OK);
     }
 
-    @GetMapping("customers/firstname/{firstname}")
-    public List<Customer> findByFirstName(@PathVariable final String firstName) {
-        return this.repository.findByFirstNameContainingIgnoreCase(firstName);
+    @GetMapping("customers/name/{name}")
+    public List<Customer> findByFirstName(@PathVariable final String name) {
+        return this.repository.findByNameContainingIgnoreCase(name);
     }
 
     @GetMapping("customers/email/{email}")
@@ -74,12 +73,8 @@ public class CustomerController {
 
         if (customerData.isPresent()) {
             final Customer updateCustomer = customerData.get();
-            if (customer.getFirstName() != null) {
-                updateCustomer.setFirstName(customer.getFirstName());
-            }
-
-            if (customer.getLastName() != null) {
-                updateCustomer.setLastName(customer.getLastName());
+            if (customer.getName() != null) {
+                updateCustomer.setName(customer.getName());
             }
 
             if (customer.getEmail() != null) {

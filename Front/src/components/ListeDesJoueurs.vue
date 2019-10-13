@@ -32,7 +32,7 @@
                             params: { customer: customers[index-1], id: customers[index-1].id }
                         }">
                             <mark>
-                                {{customers[index-1].firstName}} {{customers[index-1].lastName}}
+                                {{customers[index-1].name}}
                             </mark>
                             <small>
                                 <span v-if="customers[index-1].bestScore">{{customers[index-1].bestScore}} pts</span>

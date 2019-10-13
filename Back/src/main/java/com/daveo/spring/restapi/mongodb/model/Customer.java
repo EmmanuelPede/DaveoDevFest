@@ -19,9 +19,7 @@ public class Customer {
     @Id
     private String id;
 
-    private String firstName;
-
-    private String lastName;
+    private String name;
 
     private String email;
 
@@ -39,14 +37,13 @@ public class Customer {
 
     private String vCard;
 
-    public Customer(final String firstName, final Long lastScore) {
-        this.firstName = firstName;
+    public Customer(final String name, final Long lastScore) {
+        this.name = name;
         this.lastScore = lastScore;
     }
 
-    public Customer(final String firstName, final String lastName, final String email, final Long lastScore) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Customer(final String name, final String email, final Long lastScore) {
+        this.name = name;
         this.email = email;
         this.lastScore = lastScore;
     }
@@ -55,8 +52,7 @@ public class Customer {
     public String toString() {
         return "Customer{" +
                 "id='" + this.id + '\'' +
-                ", firstName='" + this.firstName + '\'' +
-                ", lastName='" + this.lastName + '\'' +
+                ", name='" + this.name + '\'' +
                 ", email='" + this.email + '\'' +
                 ", lastScore=" + this.lastScore +
                 ", bestScore=" + this.bestScore +
@@ -64,6 +60,7 @@ public class Customer {
                 ", created=" + this.created +
                 ", lastRideDate=" + this.lastRideDate +
                 ", rideList=" + this.rideIdList +
+                ", vCard=" + this.vCard +
                 '}';
     }
 }

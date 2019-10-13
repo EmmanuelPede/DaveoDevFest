@@ -12,7 +12,7 @@
 
     <div class="container search-result">
       <div class="row" v-for="(customer, index) in customers" :key="index">
-        {{customer.firstName}} {{customer.lastName}} ({{customer.score}} pts)
+        {{customer.name}} ({{customer.score}} pts)
       </div>
     </div>
   </div>
