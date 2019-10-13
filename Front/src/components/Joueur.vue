@@ -2,7 +2,7 @@
     <div class="player-details">
         <div class="d-flex flex-column justify-content-center" v-if="this.customer">
             <div class="d-flex flex-row">
-                <h4 class="col pt-4 pb-4 mb-4 text-left heading">{{this.customer.firstName}} {{this.customer.lastName}}</h4>
+                <h4 class="col pt-4 pb-4 mb-4 text-center heading">{{this.customer.firstName}} {{this.customer.lastName}}</h4>
             </div>
             <div class="d-flex flex-column group">
                 <label class="col">Email</label>
@@ -45,12 +45,22 @@
                     <button class="btn" v-on:click="deleteCustomer()">Supprimer</button>
                 </div>
             </div>
+
+            <div class="d-flex flex-row mb-4 mt-2">
+                <div class="col justify-content-center">
+                    <button class="btn close-btn" v-on:click="close()">
+                        <font-awesome-icon icon="angle-right" />
+                        <span class="close-btn-label">Fermer</span>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
     import http from "../http-common";
+    import router from "../router"
 
     export default {
         name: "customer-details",
@@ -90,11 +100,14 @@
                     .catch(e => {
                         console.log(e);
                     });
-            }
+            },
             /* eslint-enable no-console */
-        },
-        mounted() {
 
-        }
+            close() {
+                router.push({name: 'customer-list'});
+            }
+        },
+
+
     };
 </script>

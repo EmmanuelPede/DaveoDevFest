@@ -12,6 +12,7 @@
 .player-details .heading {
     background: #D54972;
     width: 100%;
+    text-transform: capitalize;
 }
 
 .player-details .group {
@@ -22,3 +23,27 @@
     margin-bottom: 0;
 }
 
+.close-btn {
+    position: absolute;
+    left: 0;
+    transform: translateX(-10px);
+    align-items: center;
+    display: flex;
+    top: 0;
+}
+
+.close-btn .close-btn-label {
+    display: inline-block;
+    width: 0;
+    visibility: hidden;
+    transition: all 0.15s ease-in-out;
+    overflow: hidden;
+    color: black;
+}
+
+
+.close-btn:hover .close-btn-label {
+    width: inherit;
+    margin-left: 8px;
+    visibility: inherit;
+}

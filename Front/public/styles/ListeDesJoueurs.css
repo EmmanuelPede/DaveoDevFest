@@ -10,7 +10,7 @@
 }
 
 #resultats > div {
-    transition: all 0.5s ease-in-out, margin 0.5s ease-in-out;
+    transition: all 0.5s ease, margin 0.5s ease;
     flex-grow: 1;
 }
 
@@ -28,7 +28,6 @@
     display: flex;
     flex-direction: column;
     box-shadow: 0 7px 30px rgba(62, 9, 11, 0.3);
-
 }
 
 .leaderboard {
@@ -107,6 +106,7 @@
     background: none;
     color: #fff;
     text-align: center;
+    text-transform: capitalize;
 }
 
 .leaderboard ol li mark::before, .leaderboard ol li mark::after {
@@ -148,8 +148,8 @@
     height: 100%;
     background: #fa6855;
     box-shadow: 0 5px 0 rgba(0, 0, 0, 0.08);
-    -webkit-transition: all .3s ease-in-out;
-    transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease;
+    transition: all .3s ease;
     opacity: 0;
 }
 
@@ -317,8 +317,10 @@
 
 .leaderboard ol li:hover::after {
     opacity: 1;
-    -webkit-transform: scaleX(1.06) scaleY(1.03);
-    transform: scaleX(1.06) scaleY(1.03);
+    width: calc(100% + 40px);
+
+    -webkit-transform: translateX(-20px) scaleY(1.063);
+    transform: translateX(-20px) scaleY(1.03);
 }
 
 .leaderboard ol li:hover mark::before, .leaderboard ol li:hover mark::after {
