@@ -29,7 +29,7 @@ public class CustomerController {
 
     @GetMapping("/customers")
     public List<Customer> getAllCustomers() {
-        return new ArrayList<>(this.repository.findAll());
+        return new ArrayList<>(this.repository.findAllByOrderByBestScoreDesc());
     }
 
     @PostMapping("/customer")
@@ -40,7 +40,7 @@ public class CustomerController {
                         customer.getName(),
                         customer.getEmail(),
                         customer.getLastScore(),
-                        customer.getBestScore(),
+                        customer.getBestScore() != null ? customer.getBestScore() : customer.getLastScore(),
                         customer.getActive() != null ? customer.getActive() : true,
                         customer.getCreated() != null ? customer.getCreated() : new Date(),
                         customer.getLastRideDate(),
@@ -66,45 +66,51 @@ public class CustomerController {
     }
 
     @PutMapping("/customer/{id}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable("id") final String id, @RequestBody final Customer customer) {
+    public ResponseEntity<Customer> updateCustomer(@PathVariable("id") final String id, @RequestBody final Customer updatedcustomer) {
         log.info("Update Customer with ID = " + id + "...");
 
         final Optional<Customer> customerData = this.repository.findById(id);
 
         if (customerData.isPresent()) {
+
             final Customer updateCustomer = customerData.get();
-            if (customer.getName() != null) {
-                updateCustomer.setName(customer.getName());
+
+            if (updatedcustomer.getName() != null) {
+                customer.setName(updatedcustomer.getName());
             }
 
-            if (customer.getEmail() != null) {
-                updateCustomer.setEmail(customer.getEmail());
+            if (updatedcustomer.getEmail() != null) {
+                customer.setEmail(updatedcustomer.getEmail());
             }
 
-            if (customer.getLastScore() != null) {
-                updateCustomer.setLastScore(customer.getLastScore());
+            if (updatedcustomer.getActive() != null) {
+                customer.setActive(updatedcustomer.getActive());
             }
 
-            if (customer.getActive() != null) {
-                updateCustomer.setActive(customer.getActive());
+            if (updatedcustomer.getBestScore() != null) {
+                customer.setBestScore(updatedcustomer.getBestScore());
             }
 
-            if (customer.getBestScore() != null) {
-                updateCustomer.setBestScore(customer.getBestScore());
+            if (updatedcustomer.getLastScore() != null) {
+                customer.setLastScore(updatedcustomer.getLastScore());
+
+                if (customer.getBestScore() == null || customer.getBestScore() < updatedcustomer.getLastScore()) {
+                    customer.setBestScore(updatedcustomer.getLastScore());
+                }
             }
 
-            if (customer.getLastRideDate() != null) {
-                updateCustomer.setLastRideDate(customer.getLastRideDate());
+            if (updatedcustomer.getLastRideDate() != null) {
+                customer.setLastRideDate(updatedcustomer.getLastRideDate());
             }
 
-            if (customer.getRideIdList() != null) {
-                updateCustomer.setRideIdList(customer.getRideIdList());
+            if (updatedcustomer.getRideIdList() != null) {
+                customer.setRideIdList(updatedcustomer.getRideIdList());
             }
 
-            if (customer.getVCard() != null) {
-                updateCustomer.setVCard(customer.getVCard());
+            if (updatedcustomer.getVCard() != null) {
+                customer.setVCard(updatedcustomer.getVCard());
             }
-            return new ResponseEntity<>(this.repository.save(updateCustomer), HttpStatus.OK);
+            return new ResponseEntity<>(this.repository.save(customer), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

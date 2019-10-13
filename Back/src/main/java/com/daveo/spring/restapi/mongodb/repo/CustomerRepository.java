@@ -12,4 +12,6 @@ public interface CustomerRepository extends MongoRepository<Customer, String>, C
     List<Customer> findByEmailContainingIgnoreCase(String email);
 
     Customer findFirstByActiveTrueOrderByCreatedDesc();
+
+    List<Customer> findAllByOrderByBestScoreDesc();
 }

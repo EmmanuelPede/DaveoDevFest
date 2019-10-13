@@ -1,9 +1,10 @@
 <template>
-    <div id="resultats">
-        <div v-if="customers && customers.length>0" class="leaderboard">
-            <h1>
-                <svg id="cup" x="0px" y="0px" width="25px" height="26px" viewBox="0 0 25 26"
-                     enable-background="new 0 0 25 26" xml:space="preserve">
+    <div id="resultats" :class="!this.hidden ? 'toggled' : ''">
+        <div class="flex-grow-1">
+            <div v-if="customers && customers.length>0" class="leaderboard">
+                <h1>
+                    <svg id="cup" x="0px" y="0px" width="25px" height="26px" viewBox="0 0 25 26"
+                         enable-background="new 0 0 25 26" xml:space="preserve">
                     <path fill="#F26856" d="M21.215,1.428c-0.744,0-1.438,0.213-2.024,0.579V0.865c0-0.478-0.394-0.865-0.88-0.865H6.69
                         C6.204,0,5.81,0.387,5.81,0.865v1.142C5.224,1.641,4.53,1.428,3.785,1.428C1.698,1.428,0,3.097,0,5.148
                         C0,7.2,1.698,8.869,3.785,8.869h1.453c0.315,0,0.572,0.252,0.572,0.562c0,0.311-0.257,0.563-0.572,0.563
@@ -22,41 +23,52 @@
                         C17.43,11.638,15.357,14.276,12.5,14.276z M21.215,7.138h-1.452c-0.197,0-0.39,0.024-0.572,0.07v-2.06
                         c0-1.097,0.908-1.99,2.024-1.99c1.117,0,2.025,0.893,2.025,1.99C23.241,6.246,22.333,7.138,21.215,7.138z"></path>
                 </svg>
-                Les meilleurs joueurs
-            </h1>
-            <ol>
-                <li v-for="index in 10" :key="index">
-                    <div v-if="customers[index-1]">
-                        <router-link class="item-list" :to="{
+                    Les meilleurs joueurs
+                </h1>
+                <ol>
+                    <li v-for="index in 10" :key="index">
+                        <div v-if="customers[index-1]">
+                            <router-link class="item-list" :to="{
                             name: 'customer-details',
                             params: { customer: customers[index-1], id: customers[index-1].id }
                         }">
-                            <mark>
-                                {{customers[index-1].name}}
-                            </mark>
-                            <small>
-                                <span v-if="customers[index-1].bestScore">{{customers[index-1].bestScore}} pts</span>
-                                <span v-else>0 pts</span>
-                            </small>
-                        </router-link>
-                    </div>
-                    <div v-else>
-                        <mark>--</mark>
-                        <small>0 pts</small>
-                    </div>
-                </li>
-            </ol>
-        </div>
-        <div v-else>Aucun score pour le moment</div>
+                                <mark>
+                                    {{customers[index-1].name}}
+                                </mark>
+                                <small class="d-flex flex-row justify-content-end">
+                                    <span class="d-flex flex-column">
+                                        <span>Meilleur score</span>
+                                        <span v-if="customers[index-1].bestScore">{{customers[index-1].bestScore}} pts</span>
+                                        <span v-else>0 pts</span>
+                                    </span>
+                                </small>
 
-        <router-view></router-view>
+                            </router-link>
+                        </div>
+                        <div v-else>
+                            <mark>--</mark>
+                            <small>0 pts</small>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+
+            <div v-else>Aucun score pour le moment</div>
+        </div>
+
+        <div class="border-right flex-grow-0" id="sidebar-wrapper">
+            <router-view></router-view>
+        </div>
+
     </div>
+
 
 </template>
 
 <script>
     import http from "../http-common";
     import {RideEventSourceService} from "@/services/RideEventSourceService";
+    import router from "../router"
 
     export default {
         name: "customers-list",
@@ -71,7 +83,8 @@
                         songArtist: ''
                     },
                     customer: {}
-                }
+                },
+                hidden: true
             };
         },
         methods: {
@@ -122,7 +135,6 @@
                     });
             },
             listenEvent() {
-
                 RideEventSourceService.init();
 
                 RideEventSourceService.$on('lastRide', lastRide => {
@@ -138,6 +150,10 @@
             this.retrieveCustomers();
             this.getLastRide();
             this.listenEvent();
+
+            router.afterEach((to, from) => {
+                this.hidden = to.name !== 'customer-details';
+            })
         },
         destroyed() {
             console.log("destroyed");
