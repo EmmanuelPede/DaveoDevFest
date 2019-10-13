@@ -1,3 +1,16 @@
+:root {
+    --color-1: #D54972;
+    --color-2: #C14C7A;
+    --color-3: #AC4E81;
+    --color-4: #985189;
+    --color-5: #835390;
+    --color-6: none;
+    --color-7: none;
+    --color-8: none;
+    --color-9: none;
+    --color-10: none;
+}
+
 #resultats {
     flex-direction: row;
     display: flex;
@@ -155,20 +168,20 @@
 
 /*1*/
 .leaderboard ol li:nth-child(1) {
-    background: #fa6855;
+    background: var(--color-1);
 }
 
 .leaderboard ol li:nth-child(1)::after {
-    background: #fa6855;
+    background: var(--color-1);
 }
 
 /*2*/
 .leaderboard ol li:nth-child(2) {
-    background: #F46454 /*#e0574f*/;
+    background: var(--color-2) /*#e0574f*/;
 }
 
 .leaderboard ol li:nth-child(2)::after {
-    background: #F46454;
+    background: var(--color-2);
     box-shadow: 0 4px 0 rgba(0, 0, 0, 0.08);
 }
 
@@ -179,11 +192,11 @@
 
 /*3*/
 .leaderboard ol li:nth-child(3) {
-    background: #EE6052;
+    background: var(--color-3);
 }
 
 .leaderboard ol li:nth-child(3)::after {
-    background: #EE6052;
+    background: var(--color-3);
     box-shadow: 0 3px 0 rgba(0, 0, 0, 0.11);
 }
 
@@ -194,11 +207,11 @@
 
 /*4*/
 .leaderboard ol li:nth-child(4) {
-    background: #E75C51 /*#cd4b4b*/;
+    background: var(--color-4) /*#cd4b4b*/;
 }
 
 .leaderboard ol li:nth-child(4)::after {
-    background: #E75C51 /*#cd4b4b*/;
+    background: var(--color-4) /*#cd4b4b*/;
     box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
 }
 
@@ -209,12 +222,14 @@
 
 /*5*/
 .leaderboard ol li:nth-child(5) {
-    background: #E1584F;
+    background: var(--color-5);
+    border-radius: 0 0 10px 10px;
 }
 
 .leaderboard ol li:nth-child(5)::after {
-    background: #E1584F;
+    background: var(--color-5);
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.12);
+    border-radius: 0 0 10px 10px;
 }
 
 .leaderboard ol li:nth-child(5) mark::before, .leaderboard ol li:nth-child(5) mark::after {
@@ -224,11 +239,11 @@
 
 /*6 */
 .leaderboard ol li:nth-child(6) {
-    background: #DB544E;
+    background: var(--color-6);
 }
 
 .leaderboard ol li:nth-child(6)::after {
-    background: #DB544E;
+    background: var(--color-6);
     box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15);
 }
 
@@ -241,11 +256,11 @@
 
 /*7*/
 .leaderboard ol li:nth-child(7) {
-    background: #D5504C /*#e0574f*/;
+    background: var(--color-7) /*#e0574f*/;
 }
 
 .leaderboard ol li:nth-child(7)::after {
-    background: #D5504C /*#e0574f*/;
+    background: var(--color-7) /*#e0574f*/;
     box-shadow: 0 -2px 0 rgba(0, 0, 0, 0.15);
 }
 
@@ -258,11 +273,11 @@
 
 /*8*/
 .leaderboard ol li:nth-child(8) {
-    background: #CE4C4B;
+    background: var(--color-8);
 }
 
 .leaderboard ol li:nth-child(8)::after {
-    background: #CE4C4B;
+    background: var(--color-8);
     box-shadow: 0 -3px 0 rgba(0, 0, 0, 0.15);
 }
 
@@ -275,11 +290,11 @@
 
 /*9*/
 .leaderboard ol li:nth-child(9) {
-    background: #C84849;
+    background: var(--color-9);
 }
 
 .leaderboard ol li:nth-child(9)::after {
-    background: #C84849;
+    background: var(--color-9);
     box-shadow: 0 -4px 0 rgba(0, 0, 0, 0.15);
 }
 
@@ -292,12 +307,12 @@
 
 /*10*/
 .leaderboard ol li:nth-child(10) {
-    background: #C24448;
+    background: var(--color-10);
     border-radius: 0 0 10px 10px;
 }
 
 .leaderboard ol li:nth-child(10)::after {
-    background: #C24448;
+    background: var(--color-10);
     box-shadow: 0 -5px 0 rgba(0, 0, 0, 0.12);
     border-radius: 0 0 10px 10px;
 }
