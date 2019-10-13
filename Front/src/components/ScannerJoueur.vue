@@ -127,7 +127,10 @@ export default {
             return fields;
         },
         getName: function (fn) {
-            return fn.replace(';',' ');
+            if(fn) {
+                return fn.replace(';',' ');
+            }
+            return null;
         },
         saveCustomer: function (contentScan) {
             console.info(contentScan);
