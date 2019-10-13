@@ -76,41 +76,41 @@ public class CustomerController {
             final Customer updateCustomer = customerData.get();
 
             if (updatedcustomer.getName() != null) {
-                customer.setName(updatedcustomer.getName());
+                updatedcustomer.setName(updatedcustomer.getName());
             }
 
             if (updatedcustomer.getEmail() != null) {
-                customer.setEmail(updatedcustomer.getEmail());
+                updatedcustomer.setEmail(updatedcustomer.getEmail());
             }
 
             if (updatedcustomer.getActive() != null) {
-                customer.setActive(updatedcustomer.getActive());
+                updatedcustomer.setActive(updatedcustomer.getActive());
             }
 
             if (updatedcustomer.getBestScore() != null) {
-                customer.setBestScore(updatedcustomer.getBestScore());
+                updatedcustomer.setBestScore(updatedcustomer.getBestScore());
             }
 
             if (updatedcustomer.getLastScore() != null) {
-                customer.setLastScore(updatedcustomer.getLastScore());
+                updatedcustomer.setLastScore(updatedcustomer.getLastScore());
 
-                if (customer.getBestScore() == null || customer.getBestScore() < updatedcustomer.getLastScore()) {
-                    customer.setBestScore(updatedcustomer.getLastScore());
+                if (updatedcustomer.getBestScore() == null || updatedcustomer.getBestScore() < updatedcustomer.getLastScore()) {
+                    updatedcustomer.setBestScore(updatedcustomer.getLastScore());
                 }
             }
 
             if (updatedcustomer.getLastRideDate() != null) {
-                customer.setLastRideDate(updatedcustomer.getLastRideDate());
+                updatedcustomer.setLastRideDate(updatedcustomer.getLastRideDate());
             }
 
             if (updatedcustomer.getRideIdList() != null) {
-                customer.setRideIdList(updatedcustomer.getRideIdList());
+                updatedcustomer.setRideIdList(updatedcustomer.getRideIdList());
             }
 
             if (updatedcustomer.getVCard() != null) {
-                customer.setVCard(updatedcustomer.getVCard());
+                updatedcustomer.setVCard(updatedcustomer.getVCard());
             }
-            return new ResponseEntity<>(this.repository.save(customer), HttpStatus.OK);
+            return new ResponseEntity<>(this.repository.save(updatedcustomer), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
