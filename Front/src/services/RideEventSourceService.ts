@@ -1,26 +1,30 @@
 import Vue from "vue";
+// @ts-ignore
+import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
 
 export const RideEventSourceService = new Vue({
     data() {
         return {
             // @ts-ignore
-            eventSource: <EventSource> null
+            eventSource: <NativeEventSource | EventSourcePolyfill> null
         }
     },
     methods: {
         init() {
             if (!this.eventSource) {
-                this.eventSource = new EventSource('http://localhost:8080/api/score');
+                this.eventSource = new EventSourcePolyfill('http://localhost:8080/api/score');
 
-                this.eventSource.addEventListener('second', e => {
-                    console.log('second', e);
-                }, false);
+                if (this.eventSource) {
+                    this.eventSource.addEventListener('second', (e: any) => {
+                        console.log('second', e);
+                    }, false);
 
-                this.onMessage();
+                    this.onMessage();
 
-                this.onOpen();
+                    this.onOpen();
 
-                this.onError();
+                    this.onError();
+                }
             }
 
             console.log('creation event source', this.eventSource);
@@ -30,7 +34,7 @@ export const RideEventSourceService = new Vue({
         onMessage() {
             return new Promise((resolve, reject) => {
                 if (this.eventSource) {
-                    this.eventSource.onmessage = e => {
+                    this.eventSource.onmessage = (e: { data: unknown; }) => {
                         this.$emit('lastRide', e.data);
                         resolve(e.data);
                     };
@@ -43,7 +47,7 @@ export const RideEventSourceService = new Vue({
         onError(): Promise<any> {
             return new Promise(((resolve, reject) => {
                 if (this.eventSource) {
-                    this.eventSource.onerror = e => {
+                    this.eventSource.onerror = (e: any) => {
                         if (this.eventSource.readyState == EventSource.CLOSED) {
                             console.log('close');
                         } else {
@@ -60,7 +64,7 @@ export const RideEventSourceService = new Vue({
         onOpen(): Promise<any> {
             return new Promise(((resolve, reject) => {
                 if (this.eventSource) {
-                    this.eventSource.onopen = e => {
+                    this.eventSource.onopen = (e: any) => {
                         console.log('open');
                         resolve(e);
                     }

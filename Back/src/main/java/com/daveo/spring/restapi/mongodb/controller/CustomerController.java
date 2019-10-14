@@ -34,6 +34,7 @@ public class CustomerController {
 
     @PostMapping("/customer")
     public Customer postCustomer(@RequestBody final Customer customer) {
+        log.info("Saving new customer {}", customer);
         return this.repository
                 .save(new Customer(
                         customer.getId(),
@@ -66,51 +67,51 @@ public class CustomerController {
     }
 
     @PutMapping("/customer/{id}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable("id") final String id, @RequestBody final Customer updatedcustomer) {
+    public ResponseEntity<Customer> updateCustomer(@PathVariable("id") final String id, @RequestBody final Customer updatedCustomer) {
         log.info("Update Customer with ID = " + id + "...");
 
         final Optional<Customer> customerData = this.repository.findById(id);
 
         if (customerData.isPresent()) {
 
-            final Customer updateCustomer = customerData.get();
+            final Customer customerToUpdate = customerData.get();
 
-            if (updatedcustomer.getName() != null) {
-                updatedcustomer.setName(updatedcustomer.getName());
+            if (updatedCustomer.getName() != null) {
+                customerToUpdate.setName(updatedCustomer.getName());
             }
 
-            if (updatedcustomer.getEmail() != null) {
-                updatedcustomer.setEmail(updatedcustomer.getEmail());
+            if (updatedCustomer.getEmail() != null) {
+                customerToUpdate.setEmail(updatedCustomer.getEmail());
             }
 
-            if (updatedcustomer.getActive() != null) {
-                updatedcustomer.setActive(updatedcustomer.getActive());
+            if (updatedCustomer.getActive() != null) {
+                customerToUpdate.setActive(updatedCustomer.getActive());
             }
 
-            if (updatedcustomer.getBestScore() != null) {
-                updatedcustomer.setBestScore(updatedcustomer.getBestScore());
+            if (updatedCustomer.getBestScore() != null) {
+                customerToUpdate.setBestScore(updatedCustomer.getBestScore());
             }
 
-            if (updatedcustomer.getLastScore() != null) {
-                updatedcustomer.setLastScore(updatedcustomer.getLastScore());
+            if (updatedCustomer.getLastScore() != null) {
+                customerToUpdate.setLastScore(updatedCustomer.getLastScore());
 
-                if (updatedcustomer.getBestScore() == null || updatedcustomer.getBestScore() < updatedcustomer.getLastScore()) {
-                    updatedcustomer.setBestScore(updatedcustomer.getLastScore());
+                if (customerToUpdate.getBestScore() == null || customerToUpdate.getBestScore() < updatedCustomer.getLastScore()) {
+                    customerToUpdate.setBestScore(updatedCustomer.getLastScore());
                 }
             }
 
-            if (updatedcustomer.getLastRideDate() != null) {
-                updatedcustomer.setLastRideDate(updatedcustomer.getLastRideDate());
+            if (updatedCustomer.getLastRideDate() != null) {
+                customerToUpdate.setLastRideDate(updatedCustomer.getLastRideDate());
             }
 
-            if (updatedcustomer.getRideIdList() != null) {
-                updatedcustomer.setRideIdList(updatedcustomer.getRideIdList());
+            if (updatedCustomer.getRideIdList() != null) {
+                customerToUpdate.setRideIdList(updatedCustomer.getRideIdList());
             }
 
-            if (updatedcustomer.getVCard() != null) {
-                updatedcustomer.setVCard(updatedcustomer.getVCard());
+            if (updatedCustomer.getVCard() != null) {
+                customerToUpdate.setVCard(updatedCustomer.getVCard());
             }
-            return new ResponseEntity<>(this.repository.save(updatedcustomer), HttpStatus.OK);
+            return new ResponseEntity<>(this.repository.save(customerToUpdate), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

@@ -52,8 +52,8 @@ export default {
         };
     },
     mounted: function () {
-        var Instascan = require('instascan');
-        var self = this;
+
+        const self = this;
         self.scanner = new Instascan.Scanner({ video: document.getElementById('preview'), scanPeriod: 2 });
         // eslint-disable-next-line
         self.scanner.addListener('scan', function (content, image) {
@@ -85,13 +85,13 @@ export default {
             this.scanner.start(camera);
         },
         parseVCard: function(contentScan) {
-            var Re1 = /^(version|n|fn|title|org):(.+)$/i;
-            var Re2 = /^([^:;]+);([^:]+):(.+)$/;
-            var ReKey = /item\d{1,2}\./;
-            var fields = {};
+            const Re1 = /^(version|n|fn|title|org):(.+)$/i;
+            const Re2 = /^([^:;]+);([^:]+):(.+)$/;
+            const ReKey = /item\d{1,2}\./;
+            const fields = {};
 
             contentScan.split(/\r\n|\r|\n/).forEach(function (line) {
-                var results, key;
+                let results, key;
 
                 if (Re1.test(line)) {
                     results = line.match(Re1);
@@ -101,10 +101,10 @@ export default {
                     results = line.match(Re2);
                     key = results[1].replace(ReKey, '').toLowerCase();
 
-                    var meta = {};
+                    const meta = {};
                     results[2].split(';')
                         .map(function (p, i) {
-                            var match = p.match(/([a-z]+)=(.*)/i);
+                            const match = p.match(/([a-z]+)=(.*)/i);
                             if (match) {
                                 return [match[1], match[2]];
                             } else {
@@ -135,9 +135,9 @@ export default {
         saveCustomer: function (contentScan) {
             console.info(contentScan);
             console.info("contentScan : " + contentScan);
-            var card = this.parseVCard(contentScan);
+            const card = this.parseVCard(contentScan);
             console.info("vCard : " + JSON.stringify(card));
-            var data = {
+            const data = {
                 name: this.getName(card.n) || this.getName(card.fn) || "",
                 email: card.email || "",
                 vCard: contentScan || ""

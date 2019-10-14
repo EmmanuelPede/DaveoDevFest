@@ -14,14 +14,16 @@
     "axios": "^0.18.1",
     "babel-polyfill": "^6.9.1",
     "bootstrap": "^4.3.1",
+    "event-source-polyfill": "^1.0.9",
     "fsm-as-promised": "^0.13.0",
-    "instascan": "^1.0.0",
+    "url-polyfill": "^1.1.7",
     "vcard-parser": "^1.0.0",
     "visibilityjs": "^1.2.3",
     "vue": "2.5.17",
     "vue-class-component": "^7.0.2",
     "vue-property-decorator": "^8.1.0",
     "vue-router": "^3.0.1",
+    "vue-toasted": "^1.1.27",
     "webrtc-adapter": "^1.4.0"
   },
   "devDependencies": {

@@ -325,12 +325,12 @@
 }
 
 
-.leaderboard ol li:hover {
+.leaderboard ol li:hover, .leaderboard ol li[selected='selected']  {
     z-index: 2;
     overflow: visible;
 }
 
-.leaderboard ol li:hover::after {
+.leaderboard ol li:hover::after, .leaderboard ol li[selected='selected']::after {
     opacity: 1;
     width: calc(100% + 40px);
 
@@ -339,6 +339,12 @@
 }
 
 .leaderboard ol li:hover mark::before, .leaderboard ol li:hover mark::after {
+    opacity: 1;
+    -webkit-transition: all .35s ease-in-out;
+    transition: all .35s ease-in-out;
+}
+
+.leaderboard ol li[selected='selected']mark::before, .leaderboard ol li[selected='selected'] mark::after {
     opacity: 1;
     -webkit-transition: all .35s ease-in-out;
     transition: all .35s ease-in-out;

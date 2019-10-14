@@ -26,7 +26,7 @@
                     Les meilleurs joueurs
                 </h1>
                 <ol>
-                    <li v-for="index in 10" :key="index">
+                    <li v-for="index in 10" :key="index" :selected="customers[index-1] && selectedCustomerId === customers[index-1].id">
                         <div v-if="customers[index-1]">
                             <router-link class="item-list" :to="{
                             name: 'customer-details',
@@ -59,9 +59,7 @@
         <div class="border-right flex-grow-0" id="sidebar-wrapper">
             <router-view></router-view>
         </div>
-
     </div>
-
 
 </template>
 
@@ -84,12 +82,14 @@
                     },
                     customer: {}
                 },
-                hidden: true
+                hidden: true,
+                selectedCustomerId: null
             };
         },
         methods: {
             /* eslint-disable no-console */
             retrieveCustomers() {
+                console.log('retrieveCustomer');
                 this.customers = [];
                 http
                     .get("/customers")
@@ -115,14 +115,11 @@
                                 });
                             }
                         }
-                        this.$emit("refreshData");
+
                     })
                     .catch(e => {
                         console.error("Error refreshing player list", e);
                     });
-            },
-            refreshList() {
-                this.retrieveCustomers();
             },
             getLastRide() {
                 http
@@ -140,7 +137,16 @@
                 RideEventSourceService.$on('lastRide', lastRide => {
                     console.log('Last Ride Event Received', lastRide);
                     this.lastRide = JSON.parse(lastRide);
-                    this.refreshList();
+
+                    const toastMessage = `${this.lastRide.customer.name} a enregistré un nouveau score ${this.lastRide.score} !`;
+                    this.$toasted.show(toastMessage, {
+                        duration: 5000,
+                        // fullWidth: true,
+                        position: 'bottom-center',
+                        // fitToScreen: true
+                    });
+
+                    this.retrieveCustomers();
                 });
             }
 
@@ -151,8 +157,20 @@
             this.getLastRide();
             this.listenEvent();
 
+            this.$on('refreshData', data => {
+                this.retrieveCustomers();
+            });
+
             router.afterEach((to, from) => {
                 this.hidden = to.name !== 'customer-details';
+
+                if (to.name === 'customer-details') {
+                    this.selectedCustomerId = this.$router.currentRoute.params['id'];
+                    this.hidden = false;
+                } else {
+                    this.hidden = true;
+                    this.selectedCustomerId = null;
+                }
             })
         },
         destroyed() {
