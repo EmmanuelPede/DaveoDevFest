@@ -11,7 +11,7 @@
             <div class="d-flex flex-column group">
                 <label class="col">Dernier Score</label>
                 <span class="col">
-                    <span v-if="this.customer.lastScore">{{this.customer.lastScore}}</span>
+                    <span v-if="this.customer.lastScore">{{this.customer.lastScore.toLocaleString('fr-FR')}}</span>
                     <span v-else>0</span>
                     pt(s)
                 </span>
@@ -19,7 +19,7 @@
             <div class="d-flex flex-column group">
                 <label class="col">Meilleur Score</label>
                 <span class="col">
-                    <span v-if="this.customer.bestScore">{{this.customer.bestScore}}</span>
+                    <span v-if="this.customer.bestScore">{{this.customer.bestScore.toLocaleString('fr-FR')}}</span>
                     <span v-else>0</span>
                     pt(s)
                 </span>

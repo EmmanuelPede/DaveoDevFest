@@ -349,3 +349,41 @@
     -webkit-transition: all .35s ease-in-out;
     transition: all .35s ease-in-out;
 }
+
+
+.toasted-container .toasted > svg {
+    margin-right: 2rem;
+    margin-left: -0.4rem;
+}
+
+.toasted.bubble.default {
+    font-size: 1.2em;
+    overflow: hidden;
+}
+
+
+.toasted.bubble.default span.score {
+    font-weight: bold;
+}
+
+.toasted.bubble.default::before {
+    content: "";
+    position: absolute;
+    width: calc(100% + 50px);
+    height: calc(100% + 50px);
+    top: -50px;
+    left: -50px;
+    z-index: -1;
+    background: linear-gradient(to bottom right, var(--color-1), var(--color-5)) repeat;
+    /*-webkit-transition: all 0.35s ease-in-out;*/
+    /*transition: all 0.35s ease-in-out;*/
+    -webkit-animation: 1s linear 0s infinite alternate move_eye;
+    animation:1s linear 0s infinite alternate move_eye;
+}
+
+/*.toasted.bubble.default::before {*/
+/*    transform: translateX(50px) translateY(50px);*/
+/*}*/
+
+@-webkit-keyframes move_eye { from { top:-50px; left:-50px } to { top:0; left:0 }  }
+@keyframes move_eye { from { top:-50px; left:-50px } to { top:0; left:0 }  }

@@ -26,7 +26,8 @@
                     Les meilleurs joueurs
                 </h1>
                 <ol>
-                    <li v-for="index in 10" :key="index" :selected="customers[index-1] && selectedCustomerId === customers[index-1].id">
+                    <li v-for="index in 10" :key="index"
+                        :selected="customers[index-1] && selectedCustomerId === customers[index-1].id">
                         <div v-if="customers[index-1]">
                             <router-link class="item-list" :to="{
                             name: 'customer-details',
@@ -38,7 +39,7 @@
                                 <small class="d-flex flex-row justify-content-end">
                                     <span class="d-flex flex-column">
                                         <span>Meilleur score</span>
-                                        <span v-if="customers[index-1].bestScore">{{customers[index-1].bestScore}} pts</span>
+                                        <span v-if="customers[index-1].bestScore">{{customers[index-1].bestScore.toLocaleString('fr-FR')}} pts</span>
                                         <span v-else>0 pts</span>
                                     </span>
                                 </small>
@@ -67,6 +68,8 @@
     import http from "../http-common";
     import {RideEventSourceService} from "@/services/RideEventSourceService";
     import router from "../router"
+    import * as fontawesome from "@fortawesome/fontawesome-svg-core";
+    import {faChevronRight, faThumbsUp} from "@fortawesome/free-solid-svg-icons";
 
     export default {
         name: "customers-list",
@@ -138,12 +141,13 @@
                     console.log('Last Ride Event Received', lastRide);
                     this.lastRide = JSON.parse(lastRide);
 
-                    const toastMessage = `${this.lastRide.customer.name} a enregistré un nouveau score ${this.lastRide.score} !`;
+                    const toastMessage = `${fontawesome.icon(faThumbsUp).html}<span> <span class="score">${this.lastRide.customer.name}</span> a enregistré un nouveau score <span class="score">${this.lastRide.score.toLocaleString('fr-FR')} </span> pts !</span>`;
                     this.$toasted.show(toastMessage, {
-                        duration: 5000,
+                        duration: 20000,
                         // fullWidth: true,
-                        position: 'bottom-center',
                         // fitToScreen: true
+                        position: 'bottom-center',
+                        theme: 'bubble',
                     });
 
                     this.retrieveCustomers();

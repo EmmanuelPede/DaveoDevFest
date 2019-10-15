@@ -3,7 +3,7 @@ import App from "./App.vue";
 import router from './router'
 
 import {library} from '@fortawesome/fontawesome-svg-core'
-import {faAngleRight, faChevronCircleRight, faChevronRight} from '@fortawesome/free-solid-svg-icons'
+import {faAngleRight, faChevronCircleRight, faChevronRight, faThumbsUp} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 // register the plugin on vue
 import Toasted from 'vue-toasted';
@@ -13,6 +13,7 @@ import '../node_modules/event-source-polyfill/src/eventsource'
 library.add(faAngleRight);
 library.add(faChevronRight);
 library.add(faChevronCircleRight);
+library.add(faThumbsUp);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
