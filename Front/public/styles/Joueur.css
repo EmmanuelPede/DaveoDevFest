@@ -1,12 +1,13 @@
 .player-details {
-/*    border-radius: 10px; */
+    /*    border-radius: 10px; */
     display: flex;
     justify-content: center;
     height: 100%;
 }
 
-.player-details div{
+.player-details div {
     width: 100%;
+    position: relative;
 }
 
 .player-details .heading {
@@ -38,7 +39,7 @@
     visibility: hidden;
     transition: all 0.15s ease-in-out;
     overflow: hidden;
-    color: black;
+    color: white;
 }
 
 

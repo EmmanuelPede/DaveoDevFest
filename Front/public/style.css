@@ -166,6 +166,12 @@ body, html {
     border-color: #D54972;
 }
 
+.btn:first-child:hover, :not(.btn-check)+.btn:hover{
+    color: white;
+    background-color: #D54972;
+    border-color: #D54972;
+}
+
 body {
     overflow-x: hidden;
 }
