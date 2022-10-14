@@ -1,14 +1,13 @@
 package com.daveo.spring.restapi.mongodb.mapper;
 
-import com.daveo.spring.restapi.mongodb.dto.CustomerDto;
-import com.daveo.spring.restapi.mongodb.dto.RideDto;
-import com.daveo.spring.restapi.mongodb.dto.SongDto;
-import com.daveo.spring.restapi.mongodb.model.Customer;
-import com.daveo.spring.restapi.mongodb.model.Ride;
+import java.util.function.Function;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.function.Function;
+import com.daveo.spring.restapi.mongodb.dto.RideDto;
+import com.daveo.spring.restapi.mongodb.model.Customer;
+import com.daveo.spring.restapi.mongodb.model.Ride;
 
 @Component
 public class RideMapper {
@@ -20,29 +19,15 @@ public class RideMapper {
         this.customerMapper = customerMapper;
     }
 
-    public RideDto toRideDto(final Ride ride) {
+    public RideDto toRideDto(final Ride ride, final Function<String, Customer> customerFunction) {
         if (ride == null) {
             return null;
         }
 
         final RideDto rideDto = this.convertToRideDto(ride);
 
-        final CustomerDto customerDto = new CustomerDto();
-        customerDto.setId(ride.getCustomerId());
-        rideDto.setCustomer(customerDto);
-
-        return rideDto;
-    }
-
-    public RideDto toRideDto(final Ride ride, final Function<String, Customer> customerFonction) {
-        if (ride == null) {
-            return null;
-        }
-
-        final RideDto rideDto = this.convertToRideDto(ride);
-
-        if (customerFonction != null && ride.getCustomerId() != null) {
-            rideDto.setCustomer(this.customerMapper.toCustomerDto(customerFonction.apply(ride.getCustomerId())));
+        if (customerFunction != null && ride.getCustomerId() != null) {
+            rideDto.setCustomer(this.customerMapper.toCustomerDto(customerFunction.apply(ride.getCustomerId())));
         }
 
         return rideDto;
@@ -53,13 +38,6 @@ public class RideMapper {
         rideDto.setKey(ride.getKey());
         rideDto.setScore(ride.getScore());
 
-        final SongDto songDto = new SongDto();
-
-        songDto.setSongArtist(ride.getSongArtist());
-        songDto.setSongDuration(ride.getSongDuration());
-        songDto.setSongName(ride.getSongName());
-
-        rideDto.setSong(songDto);
         return rideDto;
     }
 }

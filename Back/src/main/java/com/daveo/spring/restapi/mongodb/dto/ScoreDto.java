@@ -5,27 +5,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * Ride = sondDto + score
- */
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RideDto {
-
+public class ScoreDto {
     private Long score;
-
-    private Long key;
-
-    private CustomerDto customer;
 
     @Override
     public String toString() {
-        return "RideDto{" +
+        return "ScoreDto{" +
                 "score=" + score +
-                ", key=" + key +
-                ", customer=" + customer +
                 '}';
     }
 }

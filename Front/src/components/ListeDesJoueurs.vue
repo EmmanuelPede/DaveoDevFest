@@ -1,10 +1,10 @@
 <template>
-    <div id="resultats" :class="!this.hidden ? 'toggled' : ''">
-        <div class="flex-grow-1">
-            <div v-if="customers && customers.length>0" class="leaderboard">
-                <h1>
-                    <svg id="cup" x="0px" y="0px" width="25px" height="26px" viewBox="0 0 25 26"
-                         enable-background="new 0 0 25 26" xml:space="preserve">
+  <div id="resultats" :class="!this.hidden ? 'toggled' : ''">
+    <div class="flex-grow-1">
+      <div v-if="customers && customers.length>0" class="leaderboard">
+        <h1>
+          <svg id="cup" x="0px" y="0px" width="25px" height="26px" viewBox="0 0 25 26"
+               enable-background="new 0 0 25 26" xml:space="preserve">
                     <path fill="#F26856" d="M21.215,1.428c-0.744,0-1.438,0.213-2.024,0.579V0.865c0-0.478-0.394-0.865-0.88-0.865H6.69
                         C6.204,0,5.81,0.387,5.81,0.865v1.142C5.224,1.641,4.53,1.428,3.785,1.428C1.698,1.428,0,3.097,0,5.148
                         C0,7.2,1.698,8.869,3.785,8.869h1.453c0.315,0,0.572,0.252,0.572,0.562c0,0.311-0.257,0.563-0.572,0.563
@@ -23,163 +23,163 @@
                         C17.43,11.638,15.357,14.276,12.5,14.276z M21.215,7.138h-1.452c-0.197,0-0.39,0.024-0.572,0.07v-2.06
                         c0-1.097,0.908-1.99,2.024-1.99c1.117,0,2.025,0.893,2.025,1.99C23.241,6.246,22.333,7.138,21.215,7.138z"></path>
                 </svg>
-                    Les meilleurs joueurs
-                </h1>
-                <ol>
-                    <li v-for="index in 10" :key="index"
-                        :selected="customers[index-1] && selectedCustomerId === customers[index-1].id">
-                        <div v-if="customers[index-1]">
-                            <router-link class="item-list" :to="{
+          Les meilleurs joueurs
+        </h1>
+        <ol>
+          <li v-for="index in 10" :key="index"
+              :selected="customers[index-1] && selectedCustomerId === customers[index-1].id">
+            <div v-if="customers[index-1]">
+              <router-link class="item-list" :to="{
                             name: 'customer-details',
                             params: { customer: customers[index-1], id: customers[index-1].id }
                         }">
-                                <mark>
-                                    {{customers[index-1].name}}
-                                </mark>
-                                <small class="d-flex flex-row justify-content-end">
+                <mark>
+                  {{ customers[index - 1].name }}
+                </mark>
+                <small class="d-flex flex-row justify-content-end">
                                     <span class="d-flex flex-column">
                                         <span>Meilleur score</span>
-                                        <span v-if="customers[index-1].bestScore">{{customers[index-1].bestScore.toLocaleString('fr-FR')}} pts</span>
+                                        <span
+                                            v-if="customers[index-1].bestScore">{{ customers[index - 1].bestScore.toLocaleString('fr-FR') }} pts</span>
                                         <span v-else>0 pts</span>
                                     </span>
-                                </small>
+                </small>
 
-                            </router-link>
-                        </div>
-                        <div v-else>
-                            <mark>--</mark>
-                            <small>0 pts</small>
-                        </div>
-                    </li>
-                </ol>
+              </router-link>
             </div>
+            <div v-else>
+              <mark>--</mark>
+              <small>0 pts</small>
+            </div>
+          </li>
+        </ol>
+      </div>
 
-            <div v-else>Aucun score pour le moment</div>
-        </div>
-
-        <div class="border-right flex-grow-0" id="sidebar-wrapper">
-            <router-view></router-view>
-        </div>
+      <div v-else>Aucun score pour le moment</div>
     </div>
+
+    <div class="border-right flex-grow-0" id="sidebar-wrapper">
+      <router-view></router-view>
+    </div>
+  </div>
 
 </template>
 
 <script>
-    import http from "../http-common";
-    import {RideEventSourceService} from "@/services/RideEventSourceService";
-    import router from "../router"
-    import * as fontawesome from "@fortawesome/fontawesome-svg-core";
-    import {faChevronRight, faThumbsUp} from "@fortawesome/free-solid-svg-icons";
+import http from "../http-common";
+import {RideEventSourceService} from "@/services/RideEventSourceService";
+import router from "../router"
+import * as fontawesome from "@fortawesome/fontawesome-svg-core";
+import {faThumbsUp} from "@fortawesome/free-solid-svg-icons";
 
-    export default {
-        name: "customers-list",
-        data() {
-            return {
-                customers: [],
-                lastRide: {
-                    score: 0,
-                    song: {
-                        songName: '',
-                        songDuration: '',
-                        songArtist: ''
-                    },
-                    customer: {}
-                },
-                hidden: true,
-                selectedCustomerId: null
-            };
+export default {
+  name: "customers-list",
+  data() {
+    return {
+      customers: [],
+      lastRide: {
+        score: 0,
+        song: {
+          songName: '',
+          songDuration: '',
+          songArtist: ''
         },
-        methods: {
-            /* eslint-disable no-console */
-            retrieveCustomers() {
-                console.log('retrieveCustomer');
-                this.customers = [];
-                http
-                    .get("/customers")
-                    .then(response => {
-                        this.customers = response.data; // JSON are parsed automatically.
+        customer: {}
+      },
+      hidden: true,
+      selectedCustomerId: null
+    };
+  },
+  methods: {
+    /* eslint-disable no-console */
+    retrieveCustomers() {
+      console.log('retrieveCustomer');
+      this.customers = [];
+      http.get("/customers")
+          .then(response => {
+            this.customers = response.data; // JSON are parsed automatically.
 
-                        const selectedCustomerId = this.$router.currentRoute.params['id'];
+            const selectedCustomerId = this.$router.currentRoute.params['id'];
 
-                        if (this.customers && this.customers.length > 0
-                            && this.lastRide.customer && this.lastRide.customer.id === selectedCustomerId) {
+            if (this.customers && this.customers.length > 0
+                && this.lastRide.customer && this.lastRide.customer.id === selectedCustomerId) {
 
-                            const customer = this.customers.find(customer => customer.id === selectedCustomerId);
+              const customer = this.customers.find(customer => customer.id === selectedCustomerId);
 
-                            if (customer) {
+              if (customer) {
 
-                                this.$router.replace({
-                                    name: 'customer-list',
-                                });
-
-                                this.$router.push({
-                                    name: 'customer-details',
-                                    params: {customer: customer, id: selectedCustomerId}
-                                });
-                            }
-                        }
-
-                    })
-                    .catch(e => {
-                        console.error("Error refreshing player list", e);
-                    });
-            },
-            getLastRide() {
-                http
-                    .get("/last-ride")
-                    .then(response => {
-                        this.lastRide = response.data; // JSON are parsed automatically.
-                    })
-                    .catch(e => {
-                        console.error("Error getting last ride", e);
-                    });
-            },
-            listenEvent() {
-                RideEventSourceService.init();
-
-                RideEventSourceService.$on('lastRide', lastRide => {
-                    console.log('Last Ride Event Received', lastRide);
-                    this.lastRide = JSON.parse(lastRide);
-
-                    const toastMessage = `${fontawesome.icon(faThumbsUp).html}<span> <span class="score">${this.lastRide.customer.name}</span> a enregistré un nouveau score <span class="score">${this.lastRide.score.toLocaleString('fr-FR')} </span> pts !</span>`;
-                    this.$toasted.show(toastMessage, {
-                        duration: 20000,
-                        // fullWidth: true,
-                        // fitToScreen: true
-                        position: 'bottom-center',
-                        theme: 'bubble',
-                    });
-
-                    this.retrieveCustomers();
+                this.$router.replace({
+                  name: 'customer-list',
                 });
+
+                this.$router.push({
+                  name: 'customer-details',
+                  params: {customer: customer, id: selectedCustomerId}
+                });
+              }
             }
 
-            /* eslint-enable no-console */
-        },
-        mounted() {
-            this.retrieveCustomers();
-            this.getLastRide();
-            this.listenEvent();
+          })
+          .catch(e => {
+            console.error("Error refreshing player list", e);
+          });
+    },
+    getLastRide() {
+      http
+          .get("/last-ride")
+          .then(response => {
+            this.lastRide = response.data; // JSON are parsed automatically.
+          })
+          .catch(e => {
+            console.error("Error getting last ride", e);
+          });
+    },
+    listenEvent() {
+      RideEventSourceService.init();
 
-            this.$on('refreshData', data => {
-                this.retrieveCustomers();
-            });
+      RideEventSourceService.$on('lastRide', lastRide => {
+        console.log('Last Ride Event Received', lastRide);
+        this.lastRide = JSON.parse(lastRide);
 
-            router.afterEach((to, from) => {
-                this.hidden = to.name !== 'customer-details';
+        const toastMessage = `${fontawesome.icon(faThumbsUp).html}<span> <span class="score">${this.lastRide.customer.name}</span> a enregistré un nouveau score <span class="score">${this.lastRide.score.toLocaleString('fr-FR')} </span> pts !</span>`;
+        this.$toasted.show(toastMessage, {
+          duration: 20000,
+          // fullWidth: true,
+          // fitToScreen: true
+          position: 'bottom-center',
+          theme: 'bubble',
+        });
 
-                if (to.name === 'customer-details') {
-                    this.selectedCustomerId = this.$router.currentRoute.params['id'];
-                    this.hidden = false;
-                } else {
-                    this.hidden = true;
-                    this.selectedCustomerId = null;
-                }
-            })
-        },
-        destroyed() {
-            console.log("destroyed");
-            RideEventSourceService.$off('lastRide');
-        }
-    };
+        this.retrieveCustomers();
+      });
+    }
+
+    /* eslint-enable no-console */
+  },
+  mounted() {
+    this.retrieveCustomers();
+    this.getLastRide();
+    this.listenEvent();
+
+    this.$on('refreshData', data => {
+      this.retrieveCustomers();
+    });
+
+    router.afterEach((to, from) => {
+      this.hidden = to.name !== 'customer-details';
+
+      if (to.name === 'customer-details') {
+        this.selectedCustomerId = this.$router.currentRoute.params['id'];
+        this.hidden = false;
+      } else {
+        this.hidden = true;
+        this.selectedCustomerId = null;
+      }
+    })
+  },
+  destroyed() {
+    console.log("destroyed");
+    RideEventSourceService.$off('lastRide');
+  }
+};
 </script>

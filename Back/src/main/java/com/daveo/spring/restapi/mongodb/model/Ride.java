@@ -19,12 +19,6 @@ public class Ride {
     @Id
     private String id;
 
-    private String songName;
-
-    private String songDuration;
-
-    private String SongArtist;
-
     private Long score;
 
     private Long key;
@@ -36,13 +30,11 @@ public class Ride {
     @Override
     public String toString() {
         return "Ride{" +
-                "id='" + this.id + '\'' +
-                ", songName='" + this.songName + '\'' +
-                ", songDuration='" + this.songDuration + '\'' +
-                ", SongArtist='" + this.SongArtist + '\'' +
-                ", score=" + this.score +
-                ", key=" + this.key +
-                ", created=" + this.created +
+                "id='" + id + '\'' +
+                ", score=" + score +
+                ", key=" + key +
+                ", created=" + created +
+                ", customerId='" + customerId + '\'' +
                 '}';
     }
 }
