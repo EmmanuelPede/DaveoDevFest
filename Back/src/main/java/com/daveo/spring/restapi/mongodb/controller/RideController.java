@@ -23,7 +23,7 @@ import java.util.function.Function;
 /**
  * CustomerController
  */
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000"})
 @RestController
 @RequestMapping("/api")
 public class RideController {
