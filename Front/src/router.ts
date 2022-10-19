@@ -10,39 +10,39 @@ import ListeDesJoueurs from "@/components/ListeDesJoueurs.vue";
 Vue.use(Router);
 
 export default new Router({
-    routes: [
+  routes: [
+    {
+      path: "/",
+      name: "customer-list",
+      alias: "/joueur",
+      component: CustomersList,
+      children: [
         {
-            path: "/",
-            name: "customer-list",
-            alias: "/joueur",
-            component: CustomersList,
-            children: [
-                {
-                    path: "/joueur/:id",
-                    name: "customer-details",
-                    component: Customer,
-                    props: true
-                }
-            ]
+          path: "/joueur/:id",
+          name: "customer-details",
+          component: Customer,
+          props: true,
         },
-        {
-            path: "/ajouterManuellement",
-            name: "add",
-            component: AddCustomer
-        },
-        {
-            path: "/ajouterScanner",
-            name: "scan",
-            component: ScanCustomer
-        },
-        {
-            path: "/rechercher",
-            name: "search",
-            component: SearchCustomers
-        },
-        {
-            path: '*',
-            component: ListeDesJoueurs
-        }
-    ]
+      ],
+    },
+    {
+      path: "/ajouterManuellement",
+      name: "add",
+      component: AddCustomer,
+    },
+    {
+      path: "/ajouterScanner",
+      name: "scan",
+      component: ScanCustomer,
+    },
+    {
+      path: "/rechercher",
+      name: "search",
+      component: SearchCustomers,
+    },
+    {
+      path: "*",
+      component: ListeDesJoueurs,
+    },
+  ],
 });

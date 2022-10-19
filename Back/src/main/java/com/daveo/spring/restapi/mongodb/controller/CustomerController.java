@@ -45,6 +45,7 @@ public class CustomerController {
                         customer.getActive() != null ? customer.getActive() : true,
                         customer.getCreated() != null ? customer.getCreated() : new Date(),
                         customer.getLastRideDate(),
+                        customer.getLastSelectDate() != null ? customer.getLastSelectDate() : new Date(),
                         customer.getRideIdList(),
                         customer.getVCard()
                 ));
@@ -102,6 +103,10 @@ public class CustomerController {
 
             if (updatedCustomer.getLastRideDate() != null) {
                 customerToUpdate.setLastRideDate(updatedCustomer.getLastRideDate());
+            }
+
+            if (updatedCustomer.getLastSelectDate() != null) {
+                customerToUpdate.setLastSelectDate(updatedCustomer.getLastSelectDate());
             }
 
             if (updatedCustomer.getRideIdList() != null) {

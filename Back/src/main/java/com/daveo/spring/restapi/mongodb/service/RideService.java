@@ -48,7 +48,7 @@ public class RideService {
         lastRide.setKey(new Random().nextLong());
 
         // Get current customer
-        final Customer customer = this.customerRepository.findFirstByActiveTrueOrderByCreatedDesc();
+        final Customer customer = this.customerRepository.findFirstByActiveTrueOrderByLastSelectDateDesc();
         if (customer != null) {
 
             lastRide.setCustomerId(customer.getId());

@@ -1,50 +1,49 @@
 .player-details {
-    /*    border-radius: 10px; */
-    display: flex;
-    justify-content: center;
-    height: 100%;
+  /*    border-radius: 10px; */
+  display: flex;
+  justify-content: center;
+  height: 100%;
 }
 
 .player-details div {
-    width: 100%;
-    position: relative;
+  width: 100%;
+  position: relative;
 }
 
 .player-details .heading {
-    background: #D54972;
-    width: 100%;
-    text-transform: capitalize;
+  background: #d54972;
+  width: 100%;
+  text-transform: capitalize;
 }
 
 .player-details .group {
-    margin-bottom: 30px;
+  margin-bottom: 30px;
 }
 
 .player-details .group label.col {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .close-btn {
-    position: absolute;
-    left: 0;
-    transform: translateX(-10px);
-    align-items: center;
-    display: flex;
-    top: 0;
+  position: absolute;
+  left: 0;
+  transform: translateX(-10px);
+  align-items: center;
+  display: flex;
+  top: 0;
 }
 
 .close-btn .close-btn-label {
-    display: inline-block;
-    width: 0;
-    visibility: hidden;
-    transition: all 0.15s ease-in-out;
-    overflow: hidden;
-    color: white;
+  display: inline-block;
+  width: 0;
+  visibility: hidden;
+  transition: all 0.15s ease-in-out;
+  overflow: hidden;
+  color: white;
 }
 
-
 .close-btn:hover .close-btn-label {
-    width: inherit;
-    margin-left: 8px;
-    visibility: inherit;
+  width: inherit;
+  margin-left: 8px;
+  visibility: inherit;
 }

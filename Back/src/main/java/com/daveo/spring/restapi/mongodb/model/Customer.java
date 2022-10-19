@@ -33,6 +33,8 @@ public class Customer {
 
     private Date lastRideDate;
 
+    private Date lastSelectDate;
+
     private Set<String> rideIdList;
 
     private String vCard;
@@ -59,6 +61,7 @@ public class Customer {
                 ", active=" + this.active +
                 ", created=" + this.created +
                 ", lastRideDate=" + this.lastRideDate +
+                ", lastSelectDate=" + this.lastSelectDate +
                 ", rideList=" + this.rideIdList +
                 ", vCard=" + this.vCard +
                 '}';

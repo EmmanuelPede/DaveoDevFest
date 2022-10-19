@@ -40,6 +40,7 @@
     "gulp": "^4.0.2",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.5.4",
+    "prettier": "2.7.1",
     "sass": "^1.23.0",
     "sass-loader": "^8.0.0",
     "typescript": "^3.4.3",

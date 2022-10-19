@@ -1,28 +1,55 @@
 <template>
-  <div class="container">
-  <h2>Ajouter un joueur manuellement</h2>
+  <div class="container mt-4">
+    <h2 class="d-flex justify-content-center">
+      Ajouter un joueur manuellement
+    </h2>
     <div v-if="!submitted">
-        <div class="form-group">
-          <label for="firstName">Nom & Prénom</label>
-          <input type="text" class="form-control" id="name" required v-model="customer.name" name="name">
-        </div>
+      <div class="form-group mt-4">
+        <label for="firstName">Nom & Prénom</label>
+        <input
+          type="text"
+          class="form-control mt-2"
+          id="name"
+          required
+          v-model="customer.name"
+          name="name"
+        />
+      </div>
 
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="text" class="form-control" id="email" required v-model="customer.email" name="email">
-        </div>
-    
-        <div class="form-group">
-          <label for="score">Score</label>
-          <input type="number" class="form-control" id="score" required v-model="customer.lastScore" name="score">
-        </div>
-    
+      <div class="form-group mt-4">
+        <label for="email">Email</label>
+        <input
+          type="text"
+          class="form-control mt-2"
+          id="email"
+          required
+          v-model="customer.email"
+          name="email"
+        />
+      </div>
+
+      <div class="form-group mt-4">
+        <label for="score">Score</label>
+        <input
+          type="number"
+          class="form-control mt-2"
+          id="score"
+          required
+          v-model="customer.lastScore"
+          name="score"
+        />
+      </div>
+
+      <div class="d-flex justify-content-center mt-4">
         <button v-on:click="saveCustomer" class="btn">Enregister</button>
+      </div>
     </div>
-    
-    <div v-else>
+
+    <div v-else class="mt-4">
       <h4>Le joueur est ajouté à la liste!</h4>
-      <button class="btn btn-success" v-on:click="newCustomer">Ajouter un nouveau joueur</button>
+      <button class="btn btn-success mt-4" v-on:click="newCustomer">
+        Ajouter un nouveau joueur
+      </button>
     </div>
   </div>
 </template>
@@ -39,27 +66,27 @@ export default {
         name: "",
         email: "",
         lastScore: 0,
-        active: false
+        active: false,
       },
-      submitted: false
+      submitted: false,
     };
   },
   methods: {
     /* eslint-disable no-console */
     saveCustomer() {
-        const data = {
-            name: this.customer.name,
-            email: this.customer.email,
-            lastScore: this.customer.lastScore
-        };
+      const data = {
+        name: this.customer.name,
+        email: this.customer.email,
+        lastScore: this.customer.lastScore,
+      };
 
-        http
+      http
         .post("/customer", data)
-        .then(response => {
+        .then((response) => {
           this.customer.id = response.data.id;
           console.log(response.data);
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
         });
 
@@ -68,8 +95,8 @@ export default {
     newCustomer() {
       this.submitted = false;
       this.customer = {};
-    }
+    },
     /* eslint-enable no-console */
-  }
+  },
 };
 </script>

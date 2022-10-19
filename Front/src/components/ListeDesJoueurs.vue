@@ -1,11 +1,21 @@
 <template>
   <div id="resultats" :class="!this.hidden ? 'toggled' : ''">
     <div class="flex-grow-1">
-      <div v-if="customers && customers.length>0" class="leaderboard">
+      <div v-if="customers && customers.length > 0" class="leaderboard">
         <h1>
-          <svg id="cup" x="0px" y="0px" width="25px" height="26px" viewBox="0 0 25 26"
-               enable-background="new 0 0 25 26" xml:space="preserve">
-                    <path fill="#F26856" d="M21.215,1.428c-0.744,0-1.438,0.213-2.024,0.579V0.865c0-0.478-0.394-0.865-0.88-0.865H6.69
+          <svg
+            id="cup"
+            x="0px"
+            y="0px"
+            width="25px"
+            height="26px"
+            viewBox="0 0 25 26"
+            enable-background="new 0 0 25 26"
+            xml:space="preserve"
+          >
+            <path
+              fill="#F26856"
+              d="M21.215,1.428c-0.744,0-1.438,0.213-2.024,0.579V0.865c0-0.478-0.394-0.865-0.88-0.865H6.69
                         C6.204,0,5.81,0.387,5.81,0.865v1.142C5.224,1.641,4.53,1.428,3.785,1.428C1.698,1.428,0,3.097,0,5.148
                         C0,7.2,1.698,8.869,3.785,8.869h1.453c0.315,0,0.572,0.252,0.572,0.562c0,0.311-0.257,0.563-0.572,0.563
                         c-0.486,0-0.88,0.388-0.88,0.865c0,0.478,0.395,0.865,0.88,0.865c0.421,0,0.816-0.111,1.158-0.303
@@ -21,30 +31,46 @@
                         c0.33-0.865,0.479-1.723,0.545-2.327c0.207,0.021,0.416,0.033,0.627,0.033c0.211,0,0.42-0.013,0.627-0.033
                         C13.195,16.578,13.344,17.436,13.673,18.301z M12.5,14.276c-2.856,0-4.93-2.638-4.93-6.273V1.73h9.859v6.273
                         C17.43,11.638,15.357,14.276,12.5,14.276z M21.215,7.138h-1.452c-0.197,0-0.39,0.024-0.572,0.07v-2.06
-                        c0-1.097,0.908-1.99,2.024-1.99c1.117,0,2.025,0.893,2.025,1.99C23.241,6.246,22.333,7.138,21.215,7.138z"></path>
-                </svg>
+                        c0-1.097,0.908-1.99,2.024-1.99c1.117,0,2.025,0.893,2.025,1.99C23.241,6.246,22.333,7.138,21.215,7.138z"
+            ></path>
+          </svg>
           Les meilleurs joueurs
         </h1>
         <ol>
-          <li v-for="index in 10" :key="index"
-              :selected="customers[index-1] && selectedCustomerId === customers[index-1].id">
-            <div v-if="customers[index-1]">
-              <router-link class="item-list" :to="{
-                            name: 'customer-details',
-                            params: { customer: customers[index-1], id: customers[index-1].id }
-                        }">
+          <li
+            v-for="index in 10"
+            :key="index"
+            :selected="
+              customers[index - 1] &&
+              selectedCustomerId === customers[index - 1].id
+            "
+          >
+            <div v-if="customers[index - 1]">
+              <router-link
+                class="item-list"
+                :to="{
+                  name: 'customer-details',
+                  params: {
+                    customer: customers[index - 1],
+                    id: customers[index - 1].id,
+                  },
+                }"
+              >
                 <mark>
                   {{ customers[index - 1].name }}
                 </mark>
                 <small class="d-flex flex-row justify-content-end">
-                                    <span class="d-flex flex-column">
-                                        <span>Meilleur score</span>
-                                        <span
-                                            v-if="customers[index-1].bestScore">{{ customers[index - 1].bestScore.toLocaleString('fr-FR') }} pts</span>
-                                        <span v-else>0 pts</span>
-                                    </span>
+                  <span class="d-flex flex-column">
+                    <span>Meilleur score</span>
+                    <span v-if="customers[index - 1].bestScore"
+                      >{{
+                        customers[index - 1].bestScore.toLocaleString("fr-FR")
+                      }}
+                      pts</span
+                    >
+                    <span v-else>0 pts</span>
+                  </span>
                 </small>
-
               </router-link>
             </div>
             <div v-else>
@@ -62,15 +88,14 @@
       <router-view></router-view>
     </div>
   </div>
-
 </template>
 
 <script>
 import http from "../http-common";
-import {RideEventSourceService} from "@/services/RideEventSourceService";
-import router from "../router"
+import { RideEventSourceService } from "@/services/RideEventSourceService";
+import router from "../router";
 import * as fontawesome from "@fortawesome/fontawesome-svg-core";
-import {faThumbsUp} from "@fortawesome/free-solid-svg-icons";
+import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 
 export default {
   name: "customers-list",
@@ -80,79 +105,89 @@ export default {
       lastRide: {
         score: 0,
         song: {
-          songName: '',
-          songDuration: '',
-          songArtist: ''
+          songName: "",
+          songDuration: "",
+          songArtist: "",
         },
-        customer: {}
+        customer: {},
       },
       hidden: true,
-      selectedCustomerId: null
+      selectedCustomerId: null,
     };
   },
   methods: {
     /* eslint-disable no-console */
     retrieveCustomers() {
-      console.log('retrieveCustomer');
+      console.log("retrieveCustomer");
       this.customers = [];
-      http.get("/customers")
-          .then(response => {
-            this.customers = response.data; // JSON are parsed automatically.
+      http
+        .get("/customers")
+        .then((response) => {
+          this.customers = response.data; // JSON are parsed automatically.
 
-            const selectedCustomerId = this.$router.currentRoute.params['id'];
+          const selectedCustomerId = this.$router.currentRoute.params["id"];
 
-            if (this.customers && this.customers.length > 0
-                && this.lastRide.customer && this.lastRide.customer.id === selectedCustomerId) {
+          if (
+            this.customers &&
+            this.customers.length > 0 &&
+            this.lastRide.customer &&
+            this.lastRide.customer.id === selectedCustomerId
+          ) {
+            const customer = this.customers.find(
+              (customer) => customer.id === selectedCustomerId
+            );
 
-              const customer = this.customers.find(customer => customer.id === selectedCustomerId);
+            if (customer) {
+              this.$router.replace({
+                name: "customer-list",
+              });
 
-              if (customer) {
-
-                this.$router.replace({
-                  name: 'customer-list',
-                });
-
-                this.$router.push({
-                  name: 'customer-details',
-                  params: {customer: customer, id: selectedCustomerId}
-                });
-              }
+              this.$router.push({
+                name: "customer-details",
+                params: { customer: customer, id: selectedCustomerId },
+              });
             }
-
-          })
-          .catch(e => {
-            console.error("Error refreshing player list", e);
-          });
+          }
+        })
+        .catch((e) => {
+          console.error("Error refreshing player list", e);
+        });
     },
     getLastRide() {
       http
-          .get("/last-ride")
-          .then(response => {
-            this.lastRide = response.data; // JSON are parsed automatically.
-          })
-          .catch(e => {
-            console.error("Error getting last ride", e);
-          });
+        .get("/last-ride")
+        .then((response) => {
+          this.lastRide = response.data; // JSON are parsed automatically.
+        })
+        .catch((e) => {
+          console.error("Error getting last ride", e);
+        });
     },
     listenEvent() {
       RideEventSourceService.init();
 
-      RideEventSourceService.$on('lastRide', lastRide => {
-        console.log('Last Ride Event Received', lastRide);
+      RideEventSourceService.$on("lastRide", (lastRide) => {
+        console.log("Last Ride Event Received", lastRide);
         this.lastRide = JSON.parse(lastRide);
 
-        const toastMessage = `${fontawesome.icon(faThumbsUp).html}<span> <span class="score">${this.lastRide.customer.name}</span> a enregistré un nouveau score <span class="score">${this.lastRide.score.toLocaleString('fr-FR')} </span> pts !</span>`;
+        const toastMessage = `${
+          fontawesome.icon(faThumbsUp).html
+        }<span> <span class="score">${
+          this.lastRide.customer.name
+        }</span> a enregistré un nouveau score <span class="score">${this.lastRide.score.toLocaleString(
+          "fr-FR"
+        )} </span> pts !</span>`;
         this.$toasted.show(toastMessage, {
           duration: 20000,
           // fullWidth: true,
           // fitToScreen: true
-          position: 'bottom-center',
-          theme: 'bubble',
+          position: "bottom-center",
+          theme: "bubble",
         });
 
         this.retrieveCustomers();
       });
-    }
+    },
 
     /* eslint-enable no-console */
   },
@@ -161,25 +196,25 @@ export default {
     this.getLastRide();
     this.listenEvent();
 
-    this.$on('refreshData', data => {
+    this.$on("refreshData", (data) => {
       this.retrieveCustomers();
     });
 
     router.afterEach((to, from) => {
-      this.hidden = to.name !== 'customer-details';
+      this.hidden = to.name !== "customer-details";
 
-      if (to.name === 'customer-details') {
-        this.selectedCustomerId = this.$router.currentRoute.params['id'];
+      if (to.name === "customer-details") {
+        this.selectedCustomerId = this.$router.currentRoute.params["id"];
         this.hidden = false;
       } else {
         this.hidden = true;
         this.selectedCustomerId = null;
       }
-    })
+    });
   },
   destroyed() {
     console.log("destroyed");
-    RideEventSourceService.$off('lastRide');
-  }
+    RideEventSourceService.$off("lastRide");
+  },
 };
 </script>
