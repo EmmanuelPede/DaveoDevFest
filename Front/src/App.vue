@@ -18,6 +18,9 @@
           >
         </nav>
       </section>
+      <section>
+        <div v-if="customer" class="customer">Joueur en cours :<br> {{customer.name}}</div>
+      </section>
     </div>
     <router-view />
   </div>
@@ -30,6 +33,12 @@ import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 
 export default {
   name: "app",
+  data() {
+    return {
+      customer: null,
+      lastRide: null
+    }
+  },
   methods: {
     listenEvent() {
       RideEventSourceService.init();
@@ -37,6 +46,8 @@ export default {
       RideEventSourceService.$on("lastRide", (lastRide) => {
         console.log("Last Ride Event Received", lastRide);
         this.lastRide = JSON.parse(lastRide);
+
+        this.customer = this.lastRide.customer
 
         const toastMessage = `${
           fontawesome.icon(faThumbsUp).html

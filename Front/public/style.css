@@ -220,3 +220,8 @@ body {
 .group-btn > * + * {
   margin-left: 1rem;
 }
+
+.customer{
+  color: black;
+  padding: 1rem;
+}
