@@ -4,18 +4,18 @@
       <div v-if="customers && customers.length > 0" class="leaderboard">
         <h1>
           <svg
-            id="cup"
-            x="0px"
-            y="0px"
-            width="25px"
-            height="26px"
-            viewBox="0 0 25 26"
-            enable-background="new 0 0 25 26"
-            xml:space="preserve"
+              id="cup"
+              x="0px"
+              y="0px"
+              width="25px"
+              height="26px"
+              viewBox="0 0 25 26"
+              enable-background="new 0 0 25 26"
+              xml:space="preserve"
           >
             <path
-              fill="#F26856"
-              d="M21.215,1.428c-0.744,0-1.438,0.213-2.024,0.579V0.865c0-0.478-0.394-0.865-0.88-0.865H6.69
+                fill="#F26856"
+                d="M21.215,1.428c-0.744,0-1.438,0.213-2.024,0.579V0.865c0-0.478-0.394-0.865-0.88-0.865H6.69
                         C6.204,0,5.81,0.387,5.81,0.865v1.142C5.224,1.641,4.53,1.428,3.785,1.428C1.698,1.428,0,3.097,0,5.148
                         C0,7.2,1.698,8.869,3.785,8.869h1.453c0.315,0,0.572,0.252,0.572,0.562c0,0.311-0.257,0.563-0.572,0.563
                         c-0.486,0-0.88,0.388-0.88,0.865c0,0.478,0.395,0.865,0.88,0.865c0.421,0,0.816-0.111,1.158-0.303
@@ -38,17 +38,17 @@
         </h1>
         <ol>
           <li
-            v-for="index in 10"
-            :key="index"
-            :selected="
+              v-for="index in 50"
+              :key="index"
+              :selected="
               customers[index - 1] &&
               selectedCustomerId === customers[index - 1].id
             "
           >
             <div v-if="customers[index - 1]">
               <router-link
-                class="item-list"
-                :to="{
+                  class="item-list"
+                  :to="{
                   name: 'customer-details',
                   params: {
                     customer: customers[index - 1],
@@ -63,7 +63,7 @@
                   <span class="d-flex flex-column">
                     <span>Meilleur score</span>
                     <span v-if="customers[index - 1].bestScore"
-                      >{{
+                    >{{
                         customers[index - 1].bestScore.toLocaleString("fr-FR")
                       }}
                       pts</span
@@ -93,6 +93,7 @@
 <script>
 import http from "../http-common";
 import router from "../router";
+import {CustomerEventService} from "@/services/CustomerEventService";
 
 export default {
   name: "customers-list",
@@ -115,50 +116,49 @@ export default {
   methods: {
     /* eslint-disable no-console */
     retrieveCustomers() {
-      console.log("retrieveCustomer");
       this.customers = [];
       http
-        .get("/customers")
-        .then((response) => {
-          this.customers = response.data; // JSON are parsed automatically.
+          .get("/customers")
+          .then((response) => {
+            this.customers = response.data; // JSON are parsed automatically.
 
-          const selectedCustomerId = this.$router.currentRoute.params["id"];
+            const selectedCustomerId = this.$router.currentRoute.params["id"];
 
-          if (
-            this.customers &&
-            this.customers.length > 0 &&
-            this.lastRide.customer &&
-            this.lastRide.customer.id === selectedCustomerId
-          ) {
-            const customer = this.customers.find(
-              (customer) => customer.id === selectedCustomerId
-            );
+            if (
+                this.customers &&
+                this.customers.length > 0 &&
+                this.lastRide.customer &&
+                this.lastRide.customer.id === selectedCustomerId
+            ) {
+              const customer = this.customers.find(
+                  (customer) => customer.id === selectedCustomerId
+              );
 
-            if (customer) {
-              this.$router.replace({
-                name: "customer-list",
-              });
+              if (customer) {
+                this.$router.replace({
+                  name: "customer-list",
+                });
 
-              this.$router.push({
-                name: "customer-details",
-                params: { customer: customer, id: selectedCustomerId },
-              });
+                this.$router.push({
+                  name: "customer-details",
+                  params: {customer: customer, id: selectedCustomerId},
+                });
+              }
             }
-          }
-        })
-        .catch((e) => {
-          console.error("Error refreshing player list", e);
-        });
+          })
+          .catch((e) => {
+            console.error("Error refreshing player list", e);
+          });
     },
     getLastRide() {
       http
-        .get("/last-ride")
-        .then((response) => {
-          this.lastRide = response.data; // JSON are parsed automatically.
-        })
-        .catch((e) => {
-          console.error("Error getting last ride", e);
-        });
+          .get("/last-ride")
+          .then((response) => {
+            this.lastRide = response.data; // JSON are parsed automatically.
+          })
+          .catch((e) => {
+            console.error("Error getting last ride", e);
+          });
     },
 
     /* eslint-enable no-console */
@@ -167,7 +167,7 @@ export default {
     this.retrieveCustomers();
     this.getLastRide();
 
-    this.$on("refreshData", (data) => {
+    CustomerEventService.$on("refreshData", (data) => {
       this.retrieveCustomers();
     });
 

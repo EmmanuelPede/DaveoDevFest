@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import com.daveo.spring.restapi.mongodb.model.Customer;
@@ -34,11 +35,16 @@ public class CustomerController {
         return new ArrayList<>(this.repository.findAllByOrderByBestScoreDesc());
     }
 
+    @GetMapping("/customers/current")
+    public Customer getCurrentCustomers() {
+        return this.repository.findFirstByActiveTrueOrderByLastSelectDateDesc();
+    }
+
     @PostMapping("/customer")
     public ResponseEntity<Customer> postCustomer(@RequestBody final Customer customer) {
         log.info("Saving new customer {}", customer);
 
-        if (customer.getEmail() == null || customer.getName() == null) {
+        if (StringUtils.isEmpty(customer.getEmail()) || StringUtils.isEmpty(customer.getName())) {
             return ResponseEntity.badRequest().build();
         }
 

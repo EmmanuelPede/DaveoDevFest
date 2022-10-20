@@ -9,15 +9,15 @@
           </li>
           <li v-for="(camera, index) in cameras" :key="index">
             <span
-              v-if="camera.id === activeCameraId"
-              :title="formatName(camera.name)"
-              class="active"
-              >{{ formatName(camera.name) }}</span
+                v-if="camera.id === activeCameraId"
+                :title="formatName(camera.name)"
+                class="active"
+            >{{ formatName(camera.name) }}</span
             >
             <span v-else :title="formatName(camera.name)">
               <a @click.stop="selectCamera(camera)">{{
-                formatName(camera.name)
-              }}</a>
+                  formatName(camera.name)
+                }}</a>
             </span>
           </li>
         </ul>
@@ -25,7 +25,7 @@
       <section class="scans d-flex flex-column">
         <h2>Scans</h2>
         <span v-if="!customer" class="empty d-flex justify-content-center"
-          >Aucun badge scanné</span
+        >Aucun badge scanné</span
         >
         <span v-else>{{ customer.name }}</span>
       </section>
@@ -38,8 +38,7 @@
 
 <script>
 import http from "../http-common";
-import * as fontawesome from "@fortawesome/fontawesome-svg-core";
-import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+import {CustomerEventService} from "@/services/CustomerEventService";
 
 export default {
   name: "scan-customer",
@@ -54,7 +53,6 @@ export default {
     };
   },
   beforeDestroy() {
-    console.log("destroy");
     const self = this;
     self.scanner.removeListener("scan", self.listenScan);
     Instascan.Camera.getCameras().then(function (cameras) {
@@ -70,26 +68,26 @@ export default {
     // eslint-disable-next-line
     self.scanner.addListener("scan", self.listenScan);
     Instascan.Camera.getCameras()
-      .then(function (cameras) {
-        self.cameras = cameras;
-        if (cameras.length > 0) {
-          self.activeCameraId = cameras[0].id;
-          self.scanner.start(cameras[0]);
+        .then(function (cameras) {
+          self.cameras = cameras;
+          if (cameras.length > 0) {
+            self.activeCameraId = cameras[0].id;
+            self.scanner.start(cameras[0]);
+            // eslint-disable-next-line no-console
+            console.info("Cam " + self.activeCameraId);
+          } else {
+            // eslint-disable-next-line no-console
+            console.error("Aucune caméra disponible.");
+          }
+        })
+        .catch(function (e) {
           // eslint-disable-next-line no-console
-          console.info("Cam " + self.activeCameraId);
-        } else {
-          // eslint-disable-next-line no-console
-          console.error("Aucune caméra disponible.");
-        }
-      })
-      .catch(function (e) {
-        // eslint-disable-next-line no-console
-        console.error(e);
-      });
+          console.error(e);
+        });
   },
   methods: {
     listenScan: function (content, image) {
-      this.scans.unshift({ date: +Date.now(), content: content });
+      this.scans.unshift({date: +Date.now(), content: content});
       this.saveCustomer(content);
     },
     /* eslint-disable no-console */
@@ -119,18 +117,18 @@ export default {
 
           const meta = {};
           results[2]
-            .split(";")
-            .map(function (p, i) {
-              const match = p.match(/([a-z]+)=(.*)/i);
-              if (match) {
-                return [match[1], match[2]];
-              } else {
-                return ["TYPE" + (i === 0 ? "" : i), p];
-              }
-            })
-            .forEach(function (p) {
-              meta[p[0]] = p[1];
-            });
+              .split(";")
+              .map(function (p, i) {
+                const match = p.match(/([a-z]+)=(.*)/i);
+                if (match) {
+                  return [match[1], match[2]];
+                } else {
+                  return ["TYPE" + (i === 0 ? "" : i), p];
+                }
+              })
+              .forEach(function (p) {
+                meta[p[0]] = p[1];
+              });
 
           if (!fields[key]) fields[key] = [];
 
@@ -157,35 +155,22 @@ export default {
         name: this.getName(card.n) || this.getName(card.fn) || "",
         email: card.email || "",
         telephone:
-          card.tel &&
-          card.tel.length > 0 &&
-          card.tel[0].value.length > 0 &&
-          card.tel[0].value[0],
+            card.tel &&
+            card.tel.length > 0 &&
+            card.tel[0].value.length > 0 &&
+            card.tel[0].value[0],
         vCard: contentScan || "",
       };
       console.info(data);
       http
-        .post("/customer", data)
-        .then((response) => {
-          this.customer = response.data;
-          console.log(response.data);
-
-          const toastMessage = `${
-            fontawesome.icon(faThumbsUp).html
-          }<span> <span class="score">Bonne chance ${
-            this.customer.name
-          }</span> !</span>`;
-          this.$toasted.show(toastMessage, {
-            duration: 20000,
-            // fullWidth: true,
-            // fitToScreen: true
-            position: "bottom-center",
-            theme: "bubble",
+          .post("/customer", data)
+          .then((response) => {
+            this.customer = response.data;
+            CustomerEventService.$emit("currentCustomer", response.data);
+          })
+          .catch((e) => {
+            console.log(e);
           });
-        })
-        .catch((e) => {
-          console.log(e);
-        });
       this.submitted = true;
     },
     /* eslint-enable no-console */
