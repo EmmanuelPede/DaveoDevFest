@@ -2,7 +2,7 @@
   <div id="app" class="container-fluid">
     <div class="sidebar">
       <section class="daveo">
-        <img class="logo" src="./assets/logo_devfest.png" />
+        <img class="logo" src="./assets/logoDaveoMagellan.jpg" />
       </section>
       <section>
         <nav>
