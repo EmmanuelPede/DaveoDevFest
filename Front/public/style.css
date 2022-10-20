@@ -97,6 +97,14 @@ html {
   background: yellow;
 }
 
+.scans {
+  color: black;
+}
+
+.scans > span {
+  padding: 1rem;
+}
+
 .empty {
   font-style: italic;
 }

@@ -15,7 +15,7 @@
   flex-direction: row;
   display: flex;
   width: 100%;
-  overflow: hidden;
+  overflow-y: auto;
   color: #ffffff;
   text-align: center;
   justify-content: center;

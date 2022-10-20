@@ -1,16 +1,18 @@
 package com.daveo.spring.restapi.mongodb.controller;
 
-import com.daveo.spring.restapi.mongodb.model.Customer;
-import com.daveo.spring.restapi.mongodb.repo.CustomerRepository;
-import lombok.extern.log4j.Log4j2;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.daveo.spring.restapi.mongodb.model.Customer;
+import com.daveo.spring.restapi.mongodb.repo.CustomerRepository;
+
+import lombok.extern.log4j.Log4j2;
 
 /**
  * CustomerController
@@ -33,22 +35,46 @@ public class CustomerController {
     }
 
     @PostMapping("/customer")
-    public Customer postCustomer(@RequestBody final Customer customer) {
+    public ResponseEntity<Customer> postCustomer(@RequestBody final Customer customer) {
         log.info("Saving new customer {}", customer);
-        return this.repository
+
+        if (customer.getEmail() == null || customer.getName() == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Optional<Customer> existingCustomer = Optional.empty();
+        if (customer.getVCard() != null) {
+            existingCustomer = this.repository.findFirstByVCardIgnoreCaseOrderByLastSelectDateDesc(customer.getVCard());
+        }
+
+        if (!existingCustomer.isPresent()) {
+            existingCustomer = this.repository.findFirstByEmailIgnoreCaseAndNameIgnoreCaseOrderByLastSelectDateDesc(customer.getEmail(), customer.getName());
+        }
+
+        if (existingCustomer.isPresent()) {
+            final Customer customerToUpdate = existingCustomer.get();
+            customerToUpdate.setLastSelectDate(new Date());
+            customerToUpdate.setTelephone(customer.getTelephone() != null ? customer.getTelephone() : customerToUpdate.getTelephone());
+            customerToUpdate.setEmail(customer.getEmail() != null ? customer.getEmail() : customerToUpdate.getEmail());
+            customerToUpdate.setName(customer.getName() != null ? customer.getName() : customerToUpdate.getName());
+            return ResponseEntity.ok(this.repository.save(customerToUpdate));
+        }
+
+        return ResponseEntity.ok(this.repository
                 .save(new Customer(
                         customer.getId(),
                         customer.getName(),
                         customer.getEmail(),
+                        customer.getTelephone(),
                         customer.getLastScore(),
                         customer.getBestScore() != null ? customer.getBestScore() : customer.getLastScore(),
                         customer.getActive() != null ? customer.getActive() : true,
                         customer.getCreated() != null ? customer.getCreated() : new Date(),
                         customer.getLastRideDate(),
-                        customer.getLastSelectDate() != null ? customer.getLastSelectDate() : new Date(),
+                        new Date(),
                         customer.getRideIdList(),
                         customer.getVCard()
-                ));
+                )));
     }
 
     @DeleteMapping("/customer/{id}")
@@ -83,6 +109,10 @@ public class CustomerController {
 
             if (updatedCustomer.getEmail() != null) {
                 customerToUpdate.setEmail(updatedCustomer.getEmail());
+            }
+
+            if (updatedCustomer.getTelephone() != null) {
+                customerToUpdate.setTelephone(updatedCustomer.getTelephone());
             }
 
             if (updatedCustomer.getActive() != null) {

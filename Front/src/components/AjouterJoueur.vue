@@ -46,7 +46,7 @@
     </div>
 
     <div v-else class="mt-4">
-      <h4>Le joueur est ajouté à la liste!</h4>
+      <h4>Le joueur {{ customer.name }} a bien été ajouté à la liste</h4>
       <button class="btn btn-success mt-4" v-on:click="newCustomer">
         Ajouter un nouveau joueur
       </button>
@@ -66,7 +66,6 @@ export default {
         name: "",
         email: "",
         lastScore: 0,
-        active: false,
       },
       submitted: false,
     };
@@ -83,7 +82,7 @@ export default {
       http
         .post("/customer", data)
         .then((response) => {
-          this.customer.id = response.data.id;
+          this.customer = response.data;
           console.log(response.data);
         })
         .catch((e) => {

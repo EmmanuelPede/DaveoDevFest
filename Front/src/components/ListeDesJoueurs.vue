@@ -92,10 +92,7 @@
 
 <script>
 import http from "../http-common";
-import { RideEventSourceService } from "@/services/RideEventSourceService";
 import router from "../router";
-import * as fontawesome from "@fortawesome/fontawesome-svg-core";
-import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 
 export default {
   name: "customers-list",
@@ -163,38 +160,12 @@ export default {
           console.error("Error getting last ride", e);
         });
     },
-    listenEvent() {
-      RideEventSourceService.init();
-
-      RideEventSourceService.$on("lastRide", (lastRide) => {
-        console.log("Last Ride Event Received", lastRide);
-        this.lastRide = JSON.parse(lastRide);
-
-        const toastMessage = `${
-          fontawesome.icon(faThumbsUp).html
-        }<span> <span class="score">${
-          this.lastRide.customer.name
-        }</span> a enregistré un nouveau score <span class="score">${this.lastRide.score.toLocaleString(
-          "fr-FR"
-        )} </span> pts !</span>`;
-        this.$toasted.show(toastMessage, {
-          duration: 20000,
-          // fullWidth: true,
-          // fitToScreen: true
-          position: "bottom-center",
-          theme: "bubble",
-        });
-
-        this.retrieveCustomers();
-      });
-    },
 
     /* eslint-enable no-console */
   },
   mounted() {
     this.retrieveCustomers();
     this.getLastRide();
-    this.listenEvent();
 
     this.$on("refreshData", (data) => {
       this.retrieveCustomers();
@@ -211,10 +182,6 @@ export default {
         this.selectedCustomerId = null;
       }
     });
-  },
-  destroyed() {
-    console.log("destroyed");
-    RideEventSourceService.$off("lastRide");
   },
 };
 </script>

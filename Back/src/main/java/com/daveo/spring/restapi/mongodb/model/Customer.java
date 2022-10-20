@@ -10,6 +10,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,32 +25,29 @@ public class Customer {
 
     private String email;
 
+    private String telephone;
+
+    @JsonProperty("lastScore")
     private Long lastScore;
 
+    @JsonProperty("bestScore")
     private Long bestScore;
 
     private Boolean active;
 
     private Date created;
 
+    @JsonProperty("lastRideDate")
     private Date lastRideDate;
 
+    @JsonProperty("lastSelectDate")
     private Date lastSelectDate;
 
+    @JsonProperty("rideIdList")
     private Set<String> rideIdList;
 
+    @JsonProperty("vCard")
     private String vCard;
-
-    public Customer(final String name, final Long lastScore) {
-        this.name = name;
-        this.lastScore = lastScore;
-    }
-
-    public Customer(final String name, final String email, final Long lastScore) {
-        this.name = name;
-        this.email = email;
-        this.lastScore = lastScore;
-    }
 
     @Override
     public String toString() {
@@ -56,6 +55,7 @@ public class Customer {
                 "id='" + this.id + '\'' +
                 ", name='" + this.name + '\'' +
                 ", email='" + this.email + '\'' +
+                ", telephone='" + this.telephone + '\'' +
                 ", lastScore=" + this.lastScore +
                 ", bestScore=" + this.bestScore +
                 ", active=" + this.active +

@@ -9,15 +9,12 @@
           </li>
           <li v-for="(camera, index) in cameras" :key="index">
             <span
-              v-if="camera.id == activeCameraId"
+              v-if="camera.id === activeCameraId"
               :title="formatName(camera.name)"
               class="active"
               >{{ formatName(camera.name) }}</span
             >
-            <span
-              v-if="camera.id != activeCameraId"
-              :title="formatName(camera.name)"
-            >
+            <span v-else :title="formatName(camera.name)">
               <a @click.stop="selectCamera(camera)">{{
                 formatName(camera.name)
               }}</a>
@@ -25,20 +22,12 @@
           </li>
         </ul>
       </section>
-      <section class="scans">
+      <section class="scans d-flex flex-column">
         <h2>Scans</h2>
-        <ul v-if="scans.length === 0">
-          <li class="empty">Aucun badge scanné</li>
-        </ul>
-        <transition-group name="scans" tag="ul">
-          <li
-            v-for="scan in scans"
-            :key="scan.date"
-            :title="saveCustomer(scan.content)"
-          >
-            {{ scan.content }}
-          </li>
-        </transition-group>
+        <span v-if="!customer" class="empty d-flex justify-content-center"
+          >Aucun badge scanné</span
+        >
+        <span v-else>{{ customer.name }}</span>
       </section>
     </div>
     <div class="preview-container">
@@ -49,6 +38,8 @@
 
 <script>
 import http from "../http-common";
+import * as fontawesome from "@fortawesome/fontawesome-svg-core";
+import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 
 export default {
   name: "scan-customer",
@@ -58,16 +49,17 @@ export default {
       activeCameraId: null,
       cameras: [],
       scans: [],
-      customer: {
-        id: 0,
-        firstName: "",
-        lastName: "",
-        email: "",
-        score: 0,
-        active: false,
-      },
+      customer: null,
       submitted: false,
     };
+  },
+  beforeDestroy() {
+    console.log("destroy");
+    const self = this;
+    self.scanner.removeListener("scan", self.listenScan);
+    Instascan.Camera.getCameras().then(function (cameras) {
+      self.scanner.stop(cameras[0]);
+    });
   },
   mounted: function () {
     const self = this;
@@ -76,9 +68,7 @@ export default {
       scanPeriod: 2,
     });
     // eslint-disable-next-line
-    self.scanner.addListener("scan", function (content, image) {
-      self.scans.unshift({ date: +Date.now(), content: content });
-    });
+    self.scanner.addListener("scan", self.listenScan);
     Instascan.Camera.getCameras()
       .then(function (cameras) {
         self.cameras = cameras;
@@ -98,6 +88,10 @@ export default {
       });
   },
   methods: {
+    listenScan: function (content, image) {
+      this.scans.unshift({ date: +Date.now(), content: content });
+      this.saveCustomer(content);
+    },
     /* eslint-disable no-console */
     formatName: function (name) {
       return name || "(Inconnu)";
@@ -107,7 +101,7 @@ export default {
       this.scanner.start(camera);
     },
     parseVCard: function (contentScan) {
-      const Re1 = /^(version|n|fn|title|org):(.+)$/i;
+      const Re1 = /^(version|n|fn|title|org|email|voice):(.+)$/i;
       const Re2 = /^([^:;]+);([^:]+):(.+)$/;
       const ReKey = /item\d{1,2}\./;
       const fields = {};
@@ -156,21 +150,38 @@ export default {
       return null;
     },
     saveCustomer: function (contentScan) {
-      console.info(contentScan);
       console.info("contentScan : " + contentScan);
       const card = this.parseVCard(contentScan);
       console.info("vCard : " + JSON.stringify(card));
       const data = {
         name: this.getName(card.n) || this.getName(card.fn) || "",
         email: card.email || "",
+        telephone:
+          card.tel &&
+          card.tel.length > 0 &&
+          card.tel[0].value.length > 0 &&
+          card.tel[0].value[0],
         vCard: contentScan || "",
       };
       console.info(data);
       http
         .post("/customer", data)
         .then((response) => {
-          this.customer.id = response.data.id;
+          this.customer = response.data;
           console.log(response.data);
+
+          const toastMessage = `${
+            fontawesome.icon(faThumbsUp).html
+          }<span> <span class="score">Bonne chance ${
+            this.customer.name
+          }</span> !</span>`;
+          this.$toasted.show(toastMessage, {
+            duration: 20000,
+            // fullWidth: true,
+            // fitToScreen: true
+            position: "bottom-center",
+            theme: "bubble",
+          });
         })
         .catch((e) => {
           console.log(e);
